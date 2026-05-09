@@ -34,7 +34,7 @@
             color: var(--text-main);
             font-family: var(--font-body);
             line-height: 1.6;
-            overflow-x: hidden;
+            overflow-x: hidden; 
         }
 
         a { text-decoration: none; color: inherit; transition: var(--transition-speed); }
@@ -58,7 +58,7 @@
         nav { display: flex; justify-content: space-between; align-items: center; }
         .logo { 
             font-family: var(--font-heading); 
-            font-size: 1.8rem; 
+            font-size: 1.5rem; 
             font-weight: 700; 
             color: var(--accent-color); 
             letter-spacing: 2px; 
@@ -138,23 +138,57 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            white-space: nowrap; 
         }
         .btn-login:hover { background: var(--accent-color); color: #000; box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
 
+        /* --- MOBILE MENU TOGGLE --- */
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
         /* --- HERO SECTION --- */
         #home-section {
-            height: 70vh;
+            height: 80vh; 
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            justify-content: center; 
+            align-items: center;    
+            text-align: center;     
             background: radial-gradient(circle at center, #111 0%, #000 100%);
             border-bottom: 1px solid var(--border-color);
+            padding: 0 20px; 
+            position: relative;
+            overflow: hidden;
         }
-        .hero-title { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 15px; }
+
+        .hero-title { 
+            font-family: var(--font-heading); 
+            font-size: 3.5rem; 
+            margin-bottom: 20px; 
+            line-height: 1.2;
+            width: 100%; 
+            text-align: center; 
+            opacity: 1; /* FIX: Ensure visible by default */
+            transition: opacity 0.3s;
+        }
+        
         .hero-title span { color: var(--accent-color); }
-        .hero-subtitle { color: var(--text-muted); max-width: 600px; margin-bottom: 40px; font-size: 1.1rem; }
+
+        .hero-subtitle { 
+            color: var(--text-muted); 
+            max-width: 600px; 
+            margin: 0 auto 40px auto; 
+            font-size: 1.2rem; 
+            width: 100%;
+            text-align: center;
+            opacity: 1; /* FIX: Ensure visible by default */
+            transition: opacity 0.3s;
+        }
         
         .btn-shop {
             padding: 15px 40px;
@@ -165,8 +199,92 @@
             text-transform: uppercase;
             border-radius: 4px;
             transition: 0.3s;
+            display: block; 
+            margin: 0 auto;
+            opacity: 1; /* FIX: Ensure visible by default */
         }
         .btn-shop:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+
+        /* --- ANIMATION: SLIDE UP + GLOW (For Title/Subtitle only) --- */
+        @keyframes slideUpGlow {
+            0% {
+                opacity: 0;
+                transform: translateY(60px);
+                text-shadow: 0 0 0 transparent;
+                filter: blur(10px);
+            }
+            60% {
+                text-shadow: 0 0 30px var(--accent-color); /* Peak Glow */
+                filter: blur(0px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                text-shadow: 0 0 10px rgba(0, 255, 136, 0.6); /* Subtle final glow */
+                filter: blur(0);
+            }
+        }
+
+        /* Class added via JS on Login */
+        .animate-hero-text {
+            animation: slideUpGlow 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* --- MOBILE PROFILE SECTION --- */
+        #mobile-profile {
+            display: none;
+            padding: 60px 20px 20px;
+            min-height: 100vh;
+            background: var(--bg-color);
+        }
+        
+        .mp-header { text-align: center; margin-bottom: 40px; }
+        .mp-avatar {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: #000;
+            font-size: 3rem;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            border: 4px solid var(--border-color);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        .mp-name { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 5px; }
+        .mp-email { color: var(--text-muted); font-size: 0.9rem; }
+
+        .mp-stats {
+            display: flex; justify-content: space-around;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+        .mp-stat-item { text-align: center; }
+        .mp-stat-num { display: block; font-size: 1.5rem; font-weight: bold; color: var(--accent-color); }
+        .mp-stat-label { font-size: 0.8rem; color: var(--text-muted); }
+
+        .mp-actions { display: flex; flex-direction: column; gap: 15px; }
+        .mp-btn {
+            padding: 15px;
+            border-radius: 8px;
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .mp-btn-primary { background: var(--card-bg); border: 1px solid var(--border-color); color: white; }
+        .mp-btn-primary:hover { background: #222; border-color: var(--accent-color); }
+        .mp-btn-danger { background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; }
+        .mp-btn-danger:hover { background: #ff4444; color: white; }
+        .mp-btn-accent { background: var(--accent-color); color: #000; font-weight: bold; }
+        .mp-btn-accent:hover { box-shadow: 0 0 15px rgba(0,255,136,0.4); }
 
         /* --- SHOP SECTION --- */
         #shop-section { padding: 60px 0; min-height: 80vh; }
@@ -192,8 +310,8 @@
         .product-card:hover { border-color: var(--accent-color); transform: translateY(-5px); }
         .card-img { width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid var(--border-color); }
         .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-family: var(--font-heading); }
-        .rank-badge { font-size: 0.75rem; background: #222; padding: 2px 6px; border-radius: 4px; color: var(--accent-color); border: 1px solid #333; }
+        .card-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-family: var(--font-heading); font-size: 1rem; }
+        .rank-badge { font-size: 0.7rem; background: #222; padding: 2px 6px; border-radius: 4px; color: var(--accent-color); border: 1px solid #333; }
         .card-price { font-size: 1.2rem; font-weight: 700; color: var(--accent-color); display: block; margin: 10px 0 20px 0; }
         
         .btn-add-cart {
@@ -216,9 +334,9 @@
             display: flex; flex-wrap: wrap; gap: 40px;
             background: var(--card-bg); padding: 40px; border-radius: 10px; border: 1px solid var(--border-color);
         }
-        .detail-img { flex: 1 1 300px; height: 300px; object-fit: cover; border-radius: 8px; }
+        .detail-img { flex: 1 1 300px; height: 300px; object-fit: cover; border-radius: 8px; width: 100%; }
         .detail-info { flex: 1 1 400px; }
-        .detail-name { font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 10px; }
+        .detail-name { font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 10px; line-height: 1.2; }
         .detail-desc { color: var(--text-muted); margin: 20px 0; line-height: 1.8; }
         .detail-tags span { display: inline-block; background: #222; padding: 5px 10px; margin-right: 10px; border-radius: 4px; font-size: 0.8rem; }
         .btn-back { background: #333; color: white; padding: 10px 20px; border-radius: 4px; margin-bottom: 20px; display: inline-block; cursor: pointer; }
@@ -231,8 +349,6 @@
             grid-template-columns: 2fr 1fr;
             gap: 30px;
         }
-        @media (max-width: 768px) { .cart-grid { grid-template-columns: 1fr; } }
-
         .cart-items { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
         .cart-item { display: flex; padding: 20px; border-bottom: 1px solid var(--border-color); align-items: center; gap: 20px; }
         .cart-item:last-child { border-bottom: none; }
@@ -297,6 +413,37 @@
         /* Animation */
         .fade-in { animation: fadeIn 0.5s ease-in-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .nav-links {
+                position: absolute; top: 60px; left: 0; width: 100%;
+                flex-direction: column; background: #0a0a0a;
+                border-bottom: 1px solid #333; padding: 20px; gap: 20px;
+                display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            }
+            .nav-links.active { display: flex; }
+            .dropdown-menu {
+                position: static; transform: none; opacity: 1;
+                visibility: visible; box-shadow: none; border: none;
+                background: transparent; padding-left: 20px; margin-top: 10px; display: none;
+            }
+            .dropdown.open .dropdown-menu { display: flex; }
+            .dropdown .nav-item i { font-size: 0.8em; }
+            
+            .hero-title { font-size: 2rem; }
+            .products-grid { grid-template-columns: 1fr; }
+            .cart-grid { grid-template-columns: 1fr; }
+            .detail-container { padding: 20px; }
+            .nav-actions { gap: 10px; }
+            .btn-login { padding: 6px 12px; font-size: 0.7rem; }
+            #mobile-profile ~ footer { display: none; }
+        }
+
+        @media (min-width: 769px) {
+            #mobile-profile { display: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -305,13 +452,15 @@
     <header>
         <div class="container">
             <nav>
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>
+
                 <a href="#" class="logo" onclick="app.navigate('home')">VAYLO</a>
                 
-                <ul class="nav-links">
+                <ul class="nav-links" id="nav-links">
                     <li class="nav-item" onclick="app.navigate('home')">Home</li>
-                    
-                    <!-- ACCOUNT FILTER DROPDOWN -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" onclick="this.classList.toggle('open')">
                         Accounts <i class="fas fa-chevron-down" style="font-size: 0.7em;"></i>
                         <div class="dropdown-menu">
                             <div class="dropdown-item" onclick="app.filterShop('all')">All Accounts</div>
@@ -319,20 +468,16 @@
                             <div class="dropdown-item" onclick="app.filterShop('rank')">High Ranks</div>
                         </div>
                     </li>
-
                     <li class="nav-item">Reviews</li>
                     <li class="nav-item">FAQ</li>
+                    <li class="nav-item">Contact</li>
                 </ul>
 
-                <!-- CART & AUTH -->
                 <div class="nav-actions">
-                    <!-- Cart Button -->
-                    <button class="btn-cart" onclick="app.openCart()" title="View Cart">
+                    <button class="btn-cart" onclick="app.openCart()">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-badge" id="cart-badge">0</span>
                     </button>
-
-                    <!-- Sign In / User Profile Button -->
                     <button class="btn-login" id="auth-nav-btn" onclick="toggleModal()">Sign In</button>
                 </div>
             </nav>
@@ -340,63 +485,83 @@
     </header>
 
     <main>
+        <!-- MOBILE PROFILE SCREEN -->
+        <section id="mobile-profile">
+            <div class="container">
+                <div class="mp-header fade-in">
+                    <div class="mp-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h1 class="mp-name" id="mp-user-name">User</h1>
+                    <p class="mp-email" id="mp-user-email">user@example.com</p>
+                </div>
+
+                <div class="mp-stats fade-in">
+                    <div class="mp-stat-item">
+                        <span class="mp-stat-num" id="mp-cart-count">0</span>
+                        <span class="mp-stat-label">In Cart</span>
+                    </div>
+                    <div class="mp-stat-item">
+                        <span class="mp-stat-num">12</span>
+                        <span class="mp-stat-label">Orders</span>
+                    </div>
+                    <div class="mp-stat-item">
+                        <span class="mp-stat-num">4</span>
+                        <span class="mp-stat-label">Wishlist</span>
+                    </div>
+                </div>
+
+                <div class="mp-actions fade-in">
+                    <button class="mp-btn mp-btn-accent" onclick="app.navigate('shop', 'all')">
+                        <i class="fas fa-shopping-bag"></i> Go to Shop
+                    </button>
+                    <button class="mp-btn mp-btn-primary" onclick="app.openCart()">
+                        <i class="fas fa-shopping-cart"></i> View Cart
+                    </button>
+                    <button class="mp-btn mp-btn-primary" onclick="alert('Orders history coming soon!')">
+                        <i class="fas fa-history"></i> Order History
+                    </button>
+                    <button class="mp-btn mp-btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Log Out
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <!-- HERO SECTION -->
         <section id="home-section">
-            <div class="container">
+            <div class="container"> 
                 <h1 class="hero-title">Premium <span>Minecraft</span> Accounts</h1>
                 <p class="hero-subtitle">Secure, instant delivery and full warranty on all accounts. Level up your game today.</p>
                 <button class="btn-shop" onclick="app.navigate('shop', 'all')">Shop Now</button>
             </div>
         </section>
 
-        <!-- SHOP SECTION (List) -->
+        <!-- SHOP SECTION -->
         <section id="shop-section" class="hidden container">
             <div class="section-header">
                 <h2>Featured Accounts</h2>
                 <p class="filter-status" id="current-filter">Showing: All Items</p>
             </div>
-            
-            <div class="products-grid" id="products-grid">
-                <!-- Items injected via JS -->
-            </div>
+            <div class="products-grid" id="products-grid"></div>
         </section>
 
-        <!-- PRODUCT DETAIL SECTION (Specific Page) -->
+        <!-- PRODUCT DETAIL SECTION -->
         <section id="product-detail" class="hidden container">
             <button class="btn-back" onclick="app.navigate('shop', app.lastFilter)"><i class="fas fa-arrow-left"></i> Back to Shop</button>
-            
-            <div class="detail-container" id="detail-content">
-                <!-- Details injected via JS -->
-            </div>
+            <div class="detail-container" id="detail-content"></div>
         </section>
 
         <!-- CART SECTION -->
         <section id="cart-section" class="hidden container">
             <button class="btn-back" onclick="app.navigate('shop', app.lastFilter)"><i class="fas fa-arrow-left"></i> Back to Shop</button>
-            
-            <div class="section-header">
-                <h2>Your Cart</h2>
-            </div>
-
+            <div class="section-header"><h2>Your Cart</h2></div>
             <div class="cart-grid">
-                <div class="cart-items" id="cart-items-container">
-                    <!-- Cart items injected here -->
-                    <p style="padding: 20px; text-align: center; color: #888;">Your cart is empty.</p>
-                </div>
-
+                <div class="cart-items" id="cart-items-container"></div>
                 <div class="cart-summary">
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span id="cart-subtotal">$0.00</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Tax (5%)</span>
-                        <span id="cart-tax">$0.00</span>
-                    </div>
-                    <div class="summary-row summary-total">
-                        <span>Total</span>
-                        <span id="cart-total">$0.00</span>
-                    </div>
+                    <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">$0.00</span></div>
+                    <div class="summary-row"><span>Tax (5%)</span><span id="cart-tax">$0.00</span></div>
+                    <div class="summary-row summary-total"><span>Total</span><span id="cart-total">$0.00</span></div>
                     <button class="btn-checkout" onclick="app.checkout()">Proceed to Checkout</button>
                 </div>
             </div>
@@ -416,7 +581,6 @@
                         <a href="#" class="social-link" title="Discord"><i class="fab fa-discord"></i></a>
                     </div>
                 </div>
-
                 <div class="footer-col">
                     <h3>FAQ</h3>
                     <div class="faq-item" onclick="this.classList.toggle('active')">
@@ -428,17 +592,12 @@
                         <div class="faq-answer">We accept Credit Cards, PayPal, and Crypto.</div>
                     </div>
                 </div>
-
                 <div class="footer-col">
                     <h3>Contact</h3>
                     <p><i class="fas fa-envelope"></i> support@vaylo.com</p>
-                    <p><i class="fas fa-globe"></i> https://itzinvizzy-hub.github.io/Vaylo/</p>
                 </div>
             </div>
-            
-            <div class="copyright">
-                &copy; 2023 Vaylo. All rights reserved. Not affiliated with Mojang AB.
-            </div>
+            <div class="copyright">&copy; 2023 Vaylo. All rights reserved. Not affiliated with Mojang AB.</div>
         </div>
     </footer>
 
@@ -454,7 +613,6 @@
     </div>
 
     <script>
-        // --- 1. FIREBASE CONFIGURATION (YOUR CONFIG) ---
         const firebaseConfig = {
             apiKey: "AIzaSyC57HCyd2pFCcKwnb-y0RZP25gFFdTf6QA",
             authDomain: "vaylo-da515.firebaseapp.com",
@@ -464,82 +622,35 @@
             appId: "1:756940721209:web:3596ec33e252984c4811e8",
             measurementId: "G-8C77M7ZS3D"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // --- 2. WEBSITE DATA & APP LOGIC ---
+        function toggleMobileMenu() {
+            document.getElementById('nav-links').classList.toggle('active');
+        }
+
         const app = {
             currentView: 'home',
             lastFilter: 'all',
             currentUser: null,
-            cart: [], // Holds current user's cart items
+            cart: [],
 
-            // Data for your items
             products: [
-                {
-                    id: 1,
-                    name: "Steve_X",
-                    rank: "MVP+",
-                    cape: true,
-                    price: 15.00,
-                    desc: "Hypixel MVP+ rank with a full access login. Comes with email change. Includes rare cape from Minecon 2011.",
-                    img: "https://picsum.photos/seed/mc1/400/300"
-                },
-                {
-                    id: 2,
-                    name: "NotchWannabe",
-                    rank: "ADMIN",
-                    cape: false,
-                    price: 45.00,
-                    desc: "Legacy account with admin status on various small servers. High value username. No cape but excellent collectible.",
-                    img: "https://picsum.photos/seed/mc2/400/300"
-                },
-                {
-                    id: 3,
-                    name: "BlockMaster",
-                    rank: "VIP",
-                    cape: true,
-                    price: 12.50,
-                    desc: "Clean account with VIP rank on HiveMC. Includes Migrator Cape. Perfect for starters.",
-                    img: "https://picsum.photos/seed/mc3/400/300"
-                },
-                {
-                    id: 4,
-                    name: "DiamondMiner",
-                    rank: "None",
-                    cape: false,
-                    price: 5.00,
-                    desc: "Basic vanilla account. Great for survival gameplay. migrated to Microsoft account.",
-                    img: "https://picsum.photos/seed/mc4/400/300"
-                },
-                {
-                    id: 5,
-                    name: "Crafter99",
-                    rank: "MVP",
-                    cape: false,
-                    price: 8.00,
-                    desc: "Hypixel MVP rank. Good for bedwars practice. Cannot change email.",
-                    img: "https://picsum.photos/seed/mc5/400/300"
-                },
-                {
-                    id: 6,
-                    name: "ElytraLord",
-                    rank: "MVP++",
-                    cape: true,
-                    price: 120.00,
-                    desc: "Top tier account. MVP++ on Hypixel and includes the Million Dollar Cape. Extremely rare.",
-                    img: "https://picsum.photos/seed/mc6/400/300"
-                }
+                { id: 1, name: "Steve_X", rank: "MVP+", cape: true, price: 15.00, desc: "Hypixel MVP+ with email change. Includes rare cape.", img: "https://picsum.photos/seed/mc1/400/300" },
+                { id: 2, name: "NotchWannabe", rank: "ADMIN", cape: false, price: 45.00, desc: "Legacy account with admin status. High value username.", img: "https://picsum.photos/seed/mc2/400/300" },
+                { id: 3, name: "BlockMaster", rank: "VIP", cape: true, price: 12.50, desc: "Clean account with VIP rank on HiveMC. Includes Migrator Cape.", img: "https://picsum.photos/seed/mc3/400/300" },
+                { id: 4, name: "DiamondMiner", rank: "None", cape: false, price: 5.00, desc: "Basic vanilla account. Great for survival gameplay.", img: "https://picsum.photos/seed/mc4/400/300" },
+                { id: 5, name: "Crafter99", rank: "MVP", cape: false, price: 8.00, desc: "Hypixel MVP rank. Good for bedwars practice.", img: "https://picsum.photos/seed/mc5/400/300" },
+                { id: 6, name: "ElytraLord", rank: "MVP++", cape: true, price: 120.00, desc: "Top tier account. MVP++ on Hypixel and includes Million Dollar Cape.", img: "https://picsum.photos/seed/mc6/400/300" }
             ],
 
-            // Navigation Function
             navigate: function(view, filter = null) {
+                document.getElementById('nav-links').classList.remove('active');
                 document.getElementById('home-section').classList.add('hidden');
                 document.getElementById('shop-section').classList.add('hidden');
                 document.getElementById('product-detail').classList.add('hidden');
                 document.getElementById('cart-section').classList.add('hidden');
+                document.getElementById('mobile-profile').classList.add('hidden'); 
                 
                 if (view === 'home') {
                     document.getElementById('home-section').classList.remove('hidden');
@@ -556,17 +667,58 @@
                     document.getElementById('cart-section').classList.remove('hidden');
                     document.getElementById('cart-section').classList.add('fade-in');
                 }
-                
                 window.scrollTo(0, 0);
             },
 
-            // Render Shop with Filtering
+            triggerTextAnimation: function() {
+                const title = document.querySelector('.hero-title');
+                const subtitle = document.querySelector('.hero-subtitle');
+                
+                // Reset animation
+                title.classList.remove('animate-hero-text');
+                subtitle.classList.remove('animate-hero-text');
+                
+                // Force reflow
+                void title.offsetWidth; 
+                void subtitle.offsetWidth;
+                
+                // Add animation
+                title.classList.add('animate-hero-text');
+                subtitle.classList.add('animate-hero-text');
+            },
+
+            showMobileProfile: function() {
+                document.getElementById('home-section').classList.add('hidden');
+                document.getElementById('shop-section').classList.add('hidden');
+                document.getElementById('product-detail').classList.add('hidden');
+                document.getElementById('cart-section').classList.add('hidden');
+                
+                document.getElementById('mobile-profile').classList.remove('hidden');
+                document.getElementById('mobile-profile').classList.add('fade-in');
+
+                document.getElementById('mp-user-name').innerText = this.currentUser.displayName || "Gamer";
+                document.getElementById('mp-user-email').innerText = this.currentUser.email || "user@vaylo.com";
+                document.getElementById('mp-cart-count').innerText = this.cart.length;
+            },
+
+            checkDeviceAndAuth: function() {
+                const isPhone = window.innerWidth < 768;
+                const isLoggedIn = !!this.currentUser;
+                if (isLoggedIn && isPhone) {
+                    if (document.getElementById('mobile-profile').classList.contains('hidden')) {
+                        this.showMobileProfile();
+                    }
+                    document.getElementById('mp-cart-count').innerText = this.cart.length;
+                } else {
+                    document.getElementById('mobile-profile').classList.add('hidden');
+                }
+            },
+
             renderShop: function(filter) {
                 this.lastFilter = filter || 'all';
                 const grid = document.getElementById('products-grid');
                 const status = document.getElementById('current-filter');
                 grid.innerHTML = ''; 
-                
                 let filteredProducts = this.products;
 
                 if (filter === 'cape') {
@@ -587,20 +739,14 @@
                 filteredProducts.forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'product-card fade-in';
-                    // Click on card opens detail
                     card.onclick = (e) => {
-                        // Prevent click if clicking the "Add to Cart" button
                         if(e.target.classList.contains('btn-add-cart')) return;
                         this.openDetail(product.id);
                     }
-                    
                     card.innerHTML = `
                         <img src="${product.img}" class="card-img" alt="${product.name}">
                         <div class="card-body">
-                            <div class="card-title">
-                                ${product.name}
-                                <span class="rank-badge">${product.rank}</span>
-                            </div>
+                            <div class="card-title">${product.name} <span class="rank-badge">${product.rank}</span></div>
                             <div class="card-price">$${product.price.toFixed(2)}</div>
                             <button class="btn-add-cart" onclick="app.addToCart(${product.id})">Add to Cart</button>
                         </div>
@@ -609,16 +755,11 @@
                 });
             },
 
-            // Function called by dropdown items
-            filterShop: function(type) {
-                this.navigate('shop', type);
-            },
+            filterShop: function(type) { this.navigate('shop', type); },
 
-            // Open specific product page
             openDetail: function(id) {
                 const product = this.products.find(p => p.id === id);
                 if (!product) return;
-
                 const container = document.getElementById('detail-content');
                 container.innerHTML = `
                     <img src="${product.img}" class="detail-img" alt="${product.name}">
@@ -626,7 +767,6 @@
                         <h1 class="detail-name">${product.name}</h1>
                         <div class="detail-tags">
                             <span><i class="fas fa-crown"></i> ${product.rank}</span>
-                            <span><i class="fas fa-shield-alt"></i> Full Access</span>
                             <span><i class="fas fa-scroll"></i> ${product.cape ? 'Has Cape' : 'No Cape'}</span>
                         </div>
                         <p class="detail-desc">${product.desc}</p>
@@ -637,50 +777,27 @@
                 this.navigate('detail');
             },
 
-            // --- CART LOGIC ---
             openCart: function() {
-                // Rule: Must be signed in to see cart
-                if (!this.currentUser) {
-                    alert("Please Sign In to view your cart.");
-                    toggleModal();
-                    return;
-                }
+                if (!this.currentUser) { alert("Please Sign In to view your cart."); toggleModal(); return; }
                 this.navigate('cart');
             },
 
             addToCart: function(id) {
-                // Rule: Must be signed in to add items
-                if (!this.currentUser) {
-                    alert("You must be signed in to add items to your cart.");
-                    toggleModal(); // Open login modal
-                    return;
-                }
-
+                if (!this.currentUser) { alert("You must be signed in to add items to your cart."); toggleModal(); return; }
                 const product = this.products.find(p => p.id === id);
                 if (product) {
-                    // Check if item already exists
-                    const existingItem = this.cart.find(item => item.id === id);
-                    if (existingItem) {
-                        // Just showing an alert for now, could increment quantity logic
-                        alert("This item is already in your cart!");
-                        return;
-                    }
-
+                    if (this.cart.find(item => item.id === id)) { alert("This item is already in your cart!"); return; }
                     this.cart.push(product);
                     this.saveCartToStorage();
                     this.updateCartBadge();
+                    this.checkDeviceAndAuth(); 
                     
-                    // Visual feedback
                     const btn = event.target;
                     const originalText = btn.innerText;
                     btn.innerText = "Added!";
                     btn.style.background = "var(--accent-color)";
                     btn.style.color = "black";
-                    setTimeout(() => {
-                        btn.innerText = originalText;
-                        btn.style.background = "";
-                        btn.style.color = "";
-                    }, 1500);
+                    setTimeout(() => { btn.innerText = originalText; btn.style.background = ""; btn.style.color = ""; }, 1500);
                 }
             },
 
@@ -688,137 +805,100 @@
                 this.cart = this.cart.filter(item => item.id !== id);
                 this.saveCartToStorage();
                 this.updateCartBadge();
-                this.renderCart(); // Re-render the view
+                this.renderCart();
+                this.checkDeviceAndAuth(); 
             },
 
             saveCartToStorage: function() {
-                if (this.currentUser) {
-                    const key = `vaylo_cart_${this.currentUser.uid}`;
-                    localStorage.setItem(key, JSON.stringify(this.cart));
-                }
+                if (this.currentUser) localStorage.setItem(`vaylo_cart_${this.currentUser.uid}`, JSON.stringify(this.cart));
             },
 
             loadCartFromStorage: function() {
                 if (this.currentUser) {
-                    const key = `vaylo_cart_${this.currentUser.uid}`;
-                    const savedCart = localStorage.getItem(key);
+                    const savedCart = localStorage.getItem(`vaylo_cart_${this.currentUser.uid}`);
                     this.cart = savedCart ? JSON.parse(savedCart) : [];
-                } else {
-                    this.cart = [];
-                }
+                } else { this.cart = []; }
                 this.updateCartBadge();
             },
 
-            updateCartBadge: function() {
-                const badge = document.getElementById('cart-badge');
-                badge.innerText = this.cart.length;
-            },
+            updateCartBadge: function() { document.getElementById('cart-badge').innerText = this.cart.length; },
 
             renderCart: function() {
                 const container = document.getElementById('cart-items-container');
                 container.innerHTML = '';
-
                 if (this.cart.length === 0) {
                     container.innerHTML = '<p style="padding: 40px; text-align: center; color: #888;">Your cart is currently empty.</p>';
-                    this.updateTotals(0);
-                    return;
+                    this.updateTotals(0); return;
                 }
-
                 let subtotal = 0;
-
                 this.cart.forEach(item => {
                     subtotal += item.price;
                     const div = document.createElement('div');
                     div.className = 'cart-item';
                     div.innerHTML = `
                         <img src="${item.img}" alt="${item.name}">
-                        <div class="cart-item-details">
-                            <h4>${item.name}</h4>
-                            <div style="color:var(--accent-color); font-weight:bold;">$${item.price.toFixed(2)}</div>
-                            <small>${item.rank}</small>
-                        </div>
-                        <div class="cart-item-remove" onclick="app.removeFromCart(${item.id})">
-                            <i class="fas fa-trash"></i>
-                        </div>
+                        <div class="cart-item-details"><h4>${item.name}</h4><div style="color:var(--accent-color); font-weight:bold;">$${item.price.toFixed(2)}</div></div>
+                        <div class="cart-item-remove" onclick="app.removeFromCart(${item.id})"><i class="fas fa-trash"></i></div>
                     `;
                     container.appendChild(div);
                 });
-
                 this.updateTotals(subtotal);
             },
 
             updateTotals: function(subtotal) {
                 const tax = subtotal * 0.05;
-                const total = subtotal + tax;
-
                 document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
                 document.getElementById('cart-tax').innerText = `$${tax.toFixed(2)}`;
-                document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+                document.getElementById('cart-total').innerText = `$${(subtotal + tax).toFixed(2)}`;
             },
 
-            checkout: function() {
-                if(this.cart.length === 0) return;
-                alert("Redirecting to payment gateway... (Simulation)");
-            }
+            checkout: function() { if(this.cart.length === 0) return; alert("Redirecting to payment gateway..."); }
         };
 
-        // --- 3. AUTH FUNCTIONS (FIREBASE) ---
-        
-        function toggleModal() {
-            document.getElementById('auth-modal').classList.toggle('active');
+        function toggleModal() { document.getElementById('auth-modal').classList.toggle('active'); }
+        function login() {
+            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+                .then(toggleModal)
+                .catch((error) => alert("Login failed: " + error.message));
         }
-
-        function login(providerName) {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .then(() => {
-                    toggleModal(); 
-                })
-                .catch((error) => {
-                    console.error(error);
-                    alert("Login failed: " + error.message);
-                });
-        }
-
         function logout() {
             auth.signOut().then(() => {
+                app.navigate('home');
                 alert("You have been logged out.");
             });
         }
 
-        // Auth State Observer
         auth.onAuthStateChanged((user) => {
             const btn = document.getElementById('auth-nav-btn');
-            
             if (user) {
-                // User is Signed In
                 app.currentUser = user;
-                app.loadCartFromStorage(); // Load their specific cart from LocalStorage
-
+                app.loadCartFromStorage();
                 const displayName = user.displayName ? user.displayName.split(' ')[0] : "User";
-                btn.innerHTML = `<i class="fas fa-user-circle"></i> ${displayName} <i class="fas fa-sign-out-alt" style="font-size:0.8em; margin-left:5px;"></i>`;
-                btn.onclick = logout; // Change button click to Logout
-                btn.style.borderColor = "#fff";
-                btn.style.color = "#fff";
-            } else {
-                // User is Signed Out
-                app.currentUser = null;
-                app.cart = []; // Clear local memory cart
-                app.updateCartBadge();
+                btn.innerHTML = `<i class="fas fa-user-circle"></i> ${displayName}`;
+                btn.onclick = logout;
+                btn.style.borderColor = "#fff"; btn.style.color = "#fff";
+                
+                // --- TRIGGER TEXT ANIMATION ON LOGIN (Desktop Only) ---
+                if(window.innerWidth >= 769) {
+                    app.triggerTextAnimation();
+                }
 
-                btn.innerHTML = "Sign In";
-                btn.onclick = toggleModal; // Change button click to Open Login
-                btn.style.borderColor = "var(--accent-color)";
-                btn.style.color = "var(--accent-color)";
+            } else {
+                app.currentUser = null; app.cart = []; app.updateCartBadge();
+                btn.innerHTML = "Sign In"; btn.onclick = toggleModal;
+                btn.style.borderColor = "var(--accent-color)"; btn.style.color = "var(--accent-color)";
+                
+                // Remove animation class on logout
+                document.querySelector('.hero-title').classList.remove('animate-hero-text');
+                document.querySelector('.hero-subtitle').classList.remove('animate-hero-text');
             }
+            app.checkDeviceAndAuth();
         });
 
-        // Close modal if clicking outside
+        window.addEventListener('resize', () => { app.checkDeviceAndAuth(); });
+
         window.onclick = function(event) {
-            const modal = document.getElementById('auth-modal');
-            if (event.target == modal) {
-                toggleModal();
-            }
+            if (event.target == document.getElementById('auth-modal')) toggleModal();
         }
     </script>
 </body>
