@@ -3,294 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VAYLO | Premium Minecraft Accounts</title>
+    <title>Vaylo | Neon Market</title>
     
-    <!-- Fonts & Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <!-- Google Fonts: Poppins for a modern, clean look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CSS VARIABLES & STYLING --- */
+        /* --- CSS VARIABLES (NEON THEME) --- */
         :root {
-            --bg-color: #050505;
-            --card-bg: #111111;
+            --bg-dark: #050510; /* Very dark blue/black */
+            --bg-card: rgba(255, 255, 255, 0.03); /* Glassmorphism */
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            
+            --neon-cyan: #00f3ff;
+            --neon-pink: #bc13fe;
+            --neon-purple: #5e17eb;
+            
             --text-main: #ffffff;
-            --text-muted: #888888;
-            --accent-color: #00ff88; 
-            --border-color: #333;
-            --font-heading: 'Orbitron', sans-serif;
-            --font-body: 'Roboto', sans-serif;
-            --transition-speed: 0.3s;
+            --text-muted: #a0a0c0;
+            
+            --font-main: 'Poppins', sans-serif;
+            
+            --glow-cyan: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
+            --glow-pink: 0 0 10px rgba(188, 19, 254, 0.5), 0 0 20px rgba(188, 19, 254, 0.3);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            font-family: var(--font-body);
+            font-family: var(--font-main);
             line-height: 1.6;
-            overflow-x: hidden; 
+            overflow-x: hidden;
+            position: relative;
         }
 
-        a { text-decoration: none; color: inherit; transition: var(--transition-speed); }
+        /* --- BACKGROUND CANVAS --- */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind everything */
+            background: radial-gradient(circle at center, #1a1a2e 0%, #050510 100%);
+        }
+
+        /* --- UTILITIES & LAYOUT --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; }
-        button { cursor: pointer; border: none; font-family: var(--font-heading); }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .hidden { display: none !important; }
+        /* --- ANIMATIONS --- */
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* --- HEADER & NAV --- */
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); }
+            50% { text-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink); }
+            100% { text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); }
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            border: none;
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-neon {
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink));
+            color: white;
+            border: none;
+        }
+
+        .btn-neon:hover {
+            box-shadow: 0 0 25px rgba(188, 19, 254, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* --- HEADER --- */
         header {
-            background-color: rgba(5, 5, 5, 0.95);
-            border-bottom: 1px solid var(--border-color);
+            background: rgba(5, 5, 16, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
             padding: 15px 0;
-            backdrop-filter: blur(5px);
         }
 
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { 
-            font-family: var(--font-heading); 
-            font-size: 1.5rem; 
-            font-weight: 700; 
-            color: var(--accent-color); 
-            letter-spacing: 2px; 
-            cursor: pointer;
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-        
-        .nav-item {
-            font-size: 0.9rem;
-            font-weight: 700;
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            cursor: pointer;
         }
-        .nav-item:hover { color: var(--accent-color); }
 
-        /* Dropdown */
-        .dropdown { position: relative; }
-        .dropdown-menu {
-            position: absolute;
-            top: 100%; left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            min-width: 160px;
-            opacity: 0; visibility: hidden;
-            transition: 0.2s;
-            display: flex; flex-direction: column;
-            padding: 10px 0;
-            border-radius: 4px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        .nav-links {
+            display: flex;
+            gap: 40px;
         }
-        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-        .dropdown-item { padding: 10px 20px; font-size: 0.85rem; text-align: left; transition: 0.2s; }
-        .dropdown-item:hover { background: #1a1a1a; color: var(--accent-color); }
 
-        /* Right Header Actions (Cart & Login) */
-        .nav-actions { display: flex; gap: 15px; align-items: center; }
-
-        .btn-cart {
+        .nav-links a {
+            font-weight: 500;
+            font-size: 0.95rem;
             position: relative;
-            background: transparent;
-            color: var(--text-main);
-            font-size: 1.2rem;
-            padding: 8px;
-            transition: 0.3s;
+            color: var(--text-muted);
         }
-        .btn-cart:hover { color: var(--accent-color); }
 
-        .cart-badge {
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--neon-pink);
+        }
+
+        .nav-links a::after {
+            content: '';
             position: absolute;
-            top: 0;
-            right: 0;
-            background: var(--accent-color);
-            color: #000;
-            font-size: 0.7rem;
-            font-weight: bold;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-login {
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            background: transparent;
-            padding: 8px 20px;
-            font-weight: 700;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            cursor: pointer;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--neon-pink);
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap; 
+            box-shadow: 0 0 10px var(--neon-pink);
         }
-        .btn-login:hover { background: var(--accent-color); color: #000; box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
 
-        /* --- MOBILE MENU TOGGLE --- */
-        .hamburger {
-            display: none;
-            font-size: 1.5rem;
-            color: var(--text-main);
-            cursor: pointer;
-            margin-right: 15px;
-        }
+        .nav-links a:hover::after { width: 100%; }
 
         /* --- HERO SECTION --- */
-        #home-section {
-            height: 80vh; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center;    
-            text-align: center;     
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
-            border-bottom: 1px solid var(--border-color);
-            padding: 0 20px; 
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-title { 
-            font-family: var(--font-heading); 
-            font-size: 3.5rem; 
-            margin-bottom: 20px; 
-            line-height: 1.2;
-            width: 100%; 
-            text-align: center; 
-            opacity: 1; /* FIX: Ensure visible by default */
-            transition: opacity 0.3s;
-        }
-        
-        .hero-title span { color: var(--accent-color); }
-
-        .hero-subtitle { 
-            color: var(--text-muted); 
-            max-width: 600px; 
-            margin: 0 auto 40px auto; 
-            font-size: 1.2rem; 
-            width: 100%;
+        .hero {
+            padding: 120px 0 80px;
             text-align: center;
-            opacity: 1; /* FIX: Ensure visible by default */
-            transition: opacity 0.3s;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: floatUp 1s ease-out;
         }
         
-        .btn-shop {
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            background: var(--accent-color);
-            color: #000;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-radius: 4px;
-            transition: 0.3s;
-            display: block; 
-            margin: 0 auto;
-            opacity: 1; /* FIX: Ensure visible by default */
-        }
-        .btn-shop:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0,255,136,0.4); }
-
-        /* --- ANIMATION: SLIDE UP + GLOW (For Title/Subtitle only) --- */
-        @keyframes slideUpGlow {
-            0% {
-                opacity: 0;
-                transform: translateY(60px);
-                text-shadow: 0 0 0 transparent;
-                filter: blur(10px);
-            }
-            60% {
-                text-shadow: 0 0 30px var(--accent-color); /* Peak Glow */
-                filter: blur(0px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-                text-shadow: 0 0 10px rgba(0, 255, 136, 0.6); /* Subtle final glow */
-                filter: blur(0);
-            }
+        .hero h1 span {
+            display: block;
+            background: linear-gradient(to right, var(--neon-pink), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Class added via JS on Login */
-        .animate-hero-text {
-            animation: slideUpGlow 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: floatUp 1.2s ease-out;
         }
 
-        /* --- MOBILE PROFILE SECTION --- */
-        #mobile-profile {
-            display: none;
-            padding: 60px 20px 20px;
-            min-height: 100vh;
-            background: var(--bg-color);
+        .hero-btns {
+            animation: floatUp 1.4s ease-out;
         }
+
+        /* --- STORE SECTION --- */
+        .section-padding { padding: 80px 0; }
         
-        .mp-header { text-align: center; margin-bottom: 40px; }
-        .mp-avatar {
-            width: 120px; height: 120px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            color: #000;
-            font-size: 3rem;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 20px;
-            border: 4px solid var(--border-color);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
-        }
-        .mp-name { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 5px; }
-        .mp-email { color: var(--text-muted); font-size: 0.9rem; }
-
-        .mp-stats {
-            display: flex; justify-content: space-around;
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-        }
-        .mp-stat-item { text-align: center; }
-        .mp-stat-num { display: block; font-size: 1.5rem; font-weight: bold; color: var(--accent-color); }
-        .mp-stat-label { font-size: 0.8rem; color: var(--text-muted); }
-
-        .mp-actions { display: flex; flex-direction: column; gap: 15px; }
-        .mp-btn {
-            padding: 15px;
-            border-radius: 8px;
-            font-family: var(--font-heading);
-            font-size: 1rem;
+        .section-header {
             text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+        }
+
+        .filters {
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
         }
-        .mp-btn-primary { background: var(--card-bg); border: 1px solid var(--border-color); color: white; }
-        .mp-btn-primary:hover { background: #222; border-color: var(--accent-color); }
-        .mp-btn-danger { background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; }
-        .mp-btn-danger:hover { background: #ff4444; color: white; }
-        .mp-btn-accent { background: var(--accent-color); color: #000; font-weight: bold; }
-        .mp-btn-accent:hover { box-shadow: 0 0 15px rgba(0,255,136,0.4); }
 
-        /* --- SHOP SECTION --- */
-        #shop-section { padding: 60px 0; min-height: 80vh; }
-        .section-header { text-align: center; margin-bottom: 40px; }
-        .section-header h2 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 10px; }
-        .filter-status { color: var(--accent-color); font-size: 0.9rem; letter-spacing: 1px; }
+        .filter-btn {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font-main);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--neon-purple);
+            color: white;
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 15px rgba(94, 23, 235, 0.5);
+        }
 
         .products-grid {
             display: grid;
@@ -299,607 +268,478 @@
         }
 
         .product-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
             overflow: hidden;
+            backdrop-filter: blur(10px);
             transition: 0.3s;
-            cursor: pointer;
-            display: flex; flex-direction: column;
-        }
-        .product-card:hover { border-color: var(--accent-color); transform: translateY(-5px); }
-        .card-img { width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid var(--border-color); }
-        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-family: var(--font-heading); font-size: 1rem; }
-        .rank-badge { font-size: 0.7rem; background: #222; padding: 2px 6px; border-radius: 4px; color: var(--accent-color); border: 1px solid #333; }
-        .card-price { font-size: 1.2rem; font-weight: 700; color: var(--accent-color); display: block; margin: 10px 0 20px 0; }
-        
-        .btn-add-cart {
-            margin-top: auto;
-            width: 100%;
-            padding: 10px;
-            background: #222;
-            color: white;
-            border: 1px solid #444;
-            border-radius: 4px;
-            font-family: var(--font-body);
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-        .btn-add-cart:hover { background: var(--accent-color); color: #000; border-color: var(--accent-color); }
-
-        /* --- DETAIL PAGE --- */
-        #product-detail { padding: 60px 0; min-height: 80vh; }
-        .detail-container {
-            display: flex; flex-wrap: wrap; gap: 40px;
-            background: var(--card-bg); padding: 40px; border-radius: 10px; border: 1px solid var(--border-color);
-        }
-        .detail-img { flex: 1 1 300px; height: 300px; object-fit: cover; border-radius: 8px; width: 100%; }
-        .detail-info { flex: 1 1 400px; }
-        .detail-name { font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 10px; line-height: 1.2; }
-        .detail-desc { color: var(--text-muted); margin: 20px 0; line-height: 1.8; }
-        .detail-tags span { display: inline-block; background: #222; padding: 5px 10px; margin-right: 10px; border-radius: 4px; font-size: 0.8rem; }
-        .btn-back { background: #333; color: white; padding: 10px 20px; border-radius: 4px; margin-bottom: 20px; display: inline-block; cursor: pointer; }
-        .btn-back:hover { background: #555; }
-
-        /* --- CART PAGE --- */
-        #cart-section { padding: 60px 0; min-height: 80vh; }
-        .cart-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-        }
-        .cart-items { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
-        .cart-item { display: flex; padding: 20px; border-bottom: 1px solid var(--border-color); align-items: center; gap: 20px; }
-        .cart-item:last-child { border-bottom: none; }
-        .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; }
-        .cart-item-details { flex-grow: 1; }
-        .cart-item-remove { color: #ff4444; cursor: pointer; padding: 10px; transition: 0.2s; }
-        .cart-item-remove:hover { color: #ff0000; }
-
-        .cart-summary { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 30px; height: fit-content; }
-        .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem; }
-        .summary-total { border-top: 1px solid var(--border-color); padding-top: 15px; font-weight: bold; font-size: 1.4rem; color: var(--accent-color); }
-        .btn-checkout { width: 100%; margin-top: 20px; padding: 15px; background: var(--accent-color); color: #000; font-weight: bold; font-size: 1.1rem; border-radius: 4px; }
-        .btn-checkout:hover { box-shadow: 0 0 15px rgba(0,255,136,0.4); }
-
-        /* --- MODAL --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 2000;
-            display: none;
-            justify-content: center; align-items: center;
-        }
-        .modal-overlay.active { display: flex; }
-        
-        .auth-box {
-            background: #0a0a0a;
-            padding: 40px;
-            width: 90%; max-width: 400px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            text-align: center;
+            display: flex;
+            flex-direction: column;
             position: relative;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
         }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: #555; cursor: pointer; }
-        .close-modal:hover { color: white; }
 
-        .provider-btn {
-            width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px;
-            font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px;
-            cursor: pointer; transition: 0.2s; font-family: var(--font-body);
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.15);
         }
-        .google-btn { background: #fff; color: #000; border: 1px solid white; }
-        .google-btn:hover { background: #f0f0f0; }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(188, 19, 254, 0.2);
+        }
+
+        .product-img {
+            height: 180px;
+            background-color: #111;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+            opacity: 0.8;
+        }
+
+        .product-card:hover .product-img img {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        .product-info {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .specs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .spec-tag {
+            font-size: 0.75rem;
+            color: var(--neon-cyan);
+            background: rgba(0, 243, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .price-row {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* --- FAQ SECTION --- */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+
+        .faq-item:hover {
+            border-color: var(--neon-purple);
+            box-shadow: 0 5px 15px rgba(94, 23, 235, 0.2);
+        }
+
+        .faq-q {
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-a {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
 
         /* --- FOOTER --- */
-        footer { border-top: 1px solid var(--border-color); padding: 60px 0 20px; margin-top: auto; background: #000; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .footer-col h3 { font-family: var(--font-heading); margin-bottom: 20px; }
-        
-        .social-icons { display: flex; gap: 15px; margin-top: 20px; }
-        .social-link { width: 40px; height: 40px; background: #111; border: 1px solid #333; display: flex; justify-content: center; align-items: center; border-radius: 50%; transition: 0.3s; }
-        .social-link:hover { background: var(--accent-color); color: #000; border-color: var(--accent-color); }
-
-        .faq-item { background: #111; margin-bottom: 10px; border: 1px solid var(--border-color); padding: 15px; cursor: pointer; }
-        .faq-item.active .faq-answer { display: block; margin-top: 10px; color: var(--text-muted); font-size: 0.9rem; }
-        .faq-answer { display: none; }
-        .faq-question { font-weight: bold; display: flex; justify-content: space-between; }
-
-        .copyright { text-align: center; border-top: 1px solid #111; padding-top: 20px; color: #555; font-size: 0.8rem; }
-
-        /* Animation */
-        .fade-in { animation: fadeIn 0.5s ease-in-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- MOBILE RESPONSIVENESS --- */
-        @media (max-width: 768px) {
-            .hamburger { display: block; }
-            .nav-links {
-                position: absolute; top: 60px; left: 0; width: 100%;
-                flex-direction: column; background: #0a0a0a;
-                border-bottom: 1px solid #333; padding: 20px; gap: 20px;
-                display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            }
-            .nav-links.active { display: flex; }
-            .dropdown-menu {
-                position: static; transform: none; opacity: 1;
-                visibility: visible; box-shadow: none; border: none;
-                background: transparent; padding-left: 20px; margin-top: 10px; display: none;
-            }
-            .dropdown.open .dropdown-menu { display: flex; }
-            .dropdown .nav-item i { font-size: 0.8em; }
-            
-            .hero-title { font-size: 2rem; }
-            .products-grid { grid-template-columns: 1fr; }
-            .cart-grid { grid-template-columns: 1fr; }
-            .detail-container { padding: 20px; }
-            .nav-actions { gap: 10px; }
-            .btn-login { padding: 6px 12px; font-size: 0.7rem; }
-            #mobile-profile ~ footer { display: none; }
+        footer {
+            background: #02020a;
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 50px;
         }
 
-        @media (min-width: 769px) {
-            #mobile-profile { display: none !important; }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-links h4 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links ul li { margin-bottom: 8px; }
+        .footer-links a:hover { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); }
+
+        /* --- TOAST --- */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(10, 10, 20, 0.9);
+            border: 1px solid var(--neon-cyan);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            z-index: 1000;
+            font-family: var(--font-main);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .nav-links { display: none; }
+            .faq-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- PARTICLE BACKGROUND CANVAS -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- NAV -->
     <header>
-        <div class="container">
-            <nav>
-                <div class="hamburger" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars"></i>
-                </div>
-
-                <a href="#" class="logo" onclick="app.navigate('home')">VAYLO</a>
-                
-                <ul class="nav-links" id="nav-links">
-                    <li class="nav-item" onclick="app.navigate('home')">Home</li>
-                    <li class="nav-item dropdown" onclick="this.classList.toggle('open')">
-                        Accounts <i class="fas fa-chevron-down" style="font-size: 0.7em;"></i>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-item" onclick="app.filterShop('all')">All Accounts</div>
-                            <div class="dropdown-item" onclick="app.filterShop('cape')">Capes Only</div>
-                            <div class="dropdown-item" onclick="app.filterShop('rank')">High Ranks</div>
-                        </div>
-                    </li>
-                    <li class="nav-item">Reviews</li>
-                    <li class="nav-item">FAQ</li>
-                    <li class="nav-item">Contact</li>
-                </ul>
-
-                <div class="nav-actions">
-                    <button class="btn-cart" onclick="app.openCart()">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-badge" id="cart-badge">0</span>
-                    </button>
-                    <button class="btn-login" id="auth-nav-btn" onclick="toggleModal()">Sign In</button>
-                </div>
+        <div class="container nav-container">
+            <a href="#" class="logo">VAYLO</a>
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#store">Accounts</a>
+                <a href="#features">Features</a>
+                <a href="#faq">FAQ</a>
             </nav>
+            <button class="btn btn-neon" onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})">Get Started</button>
         </div>
     </header>
 
-    <main>
-        <!-- MOBILE PROFILE SCREEN -->
-        <section id="mobile-profile">
-            <div class="container">
-                <div class="mp-header fade-in">
-                    <div class="mp-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <h1 class="mp-name" id="mp-user-name">User</h1>
-                    <p class="mp-email" id="mp-user-email">user@example.com</p>
-                </div>
-
-                <div class="mp-stats fade-in">
-                    <div class="mp-stat-item">
-                        <span class="mp-stat-num" id="mp-cart-count">0</span>
-                        <span class="mp-stat-label">In Cart</span>
-                    </div>
-                    <div class="mp-stat-item">
-                        <span class="mp-stat-num">12</span>
-                        <span class="mp-stat-label">Orders</span>
-                    </div>
-                    <div class="mp-stat-item">
-                        <span class="mp-stat-num">4</span>
-                        <span class="mp-stat-label">Wishlist</span>
-                    </div>
-                </div>
-
-                <div class="mp-actions fade-in">
-                    <button class="mp-btn mp-btn-accent" onclick="app.navigate('shop', 'all')">
-                        <i class="fas fa-shopping-bag"></i> Go to Shop
-                    </button>
-                    <button class="mp-btn mp-btn-primary" onclick="app.openCart()">
-                        <i class="fas fa-shopping-cart"></i> View Cart
-                    </button>
-                    <button class="mp-btn mp-btn-primary" onclick="alert('Orders history coming soon!')">
-                        <i class="fas fa-history"></i> Order History
-                    </button>
-                    <button class="mp-btn mp-btn-danger" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Log Out
-                    </button>
-                </div>
+    <!-- HERO -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>
+                Next Gen
+                <span>Minecraft Accounts</span>
+            </h1>
+            <p>Secure, high-quality, full-access accounts delivered instantly. Upgrade your experience with Vaylo's premium marketplace.</p>
+            <div class="hero-btns">
+                <button class="btn btn-primary" onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})">Browse Store</button>
+                <button class="btn btn-neon" style="margin-left: 15px;">Join Discord</button>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- HERO SECTION -->
-        <section id="home-section">
-            <div class="container"> 
-                <h1 class="hero-title">Premium <span>Minecraft</span> Accounts</h1>
-                <p class="hero-subtitle">Secure, instant delivery and full warranty on all accounts. Level up your game today.</p>
-                <button class="btn-shop" onclick="app.navigate('shop', 'all')">Shop Now</button>
-            </div>
-        </section>
-
-        <!-- SHOP SECTION -->
-        <section id="shop-section" class="hidden container">
+    <!-- STORE -->
+    <section id="store" class="section-padding">
+        <div class="container">
             <div class="section-header">
                 <h2>Featured Accounts</h2>
-                <p class="filter-status" id="current-filter">Showing: All Items</p>
+                <p>Hand-picked accounts with the best stats and security.</p>
             </div>
-            <div class="products-grid" id="products-grid"></div>
-        </section>
 
-        <!-- PRODUCT DETAIL SECTION -->
-        <section id="product-detail" class="hidden container">
-            <button class="btn-back" onclick="app.navigate('shop', app.lastFilter)"><i class="fas fa-arrow-left"></i> Back to Shop</button>
-            <div class="detail-container" id="detail-content"></div>
-        </section>
+            <div class="filters">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Hypixel Ranked</button>
+                <button class="filter-btn">Full Access</button>
+                <button class="filter-btn">OG Names</button>
+            </div>
 
-        <!-- CART SECTION -->
-        <section id="cart-section" class="hidden container">
-            <button class="btn-back" onclick="app.navigate('shop', app.lastFilter)"><i class="fas fa-arrow-left"></i> Back to Shop</button>
-            <div class="section-header"><h2>Your Cart</h2></div>
-            <div class="cart-grid">
-                <div class="cart-items" id="cart-items-container"></div>
-                <div class="cart-summary">
-                    <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">$0.00</span></div>
-                    <div class="summary-row"><span>Tax (5%)</span><span id="cart-tax">$0.00</span></div>
-                    <div class="summary-row summary-total"><span>Total</span><span id="cart-total">$0.00</span></div>
-                    <button class="btn-checkout" onclick="app.checkout()">Proceed to Checkout</button>
+            <div class="products-grid">
+                <!-- Card 1 -->
+                <div class="product-card">
+                    <span class="badge">Hot</span>
+                    <div class="product-img">
+                        <img src="https://picsum.photos/seed/neon1/400/300" alt="Minecraft Account">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">Hypixel MVP+</div>
+                        <div class="specs">
+                            <span class="spec-tag">Level 120+</span>
+                            <span class="spec-tag">Bedwars God</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price">$24.99</span>
+                            <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('Hypixel MVP+ Level 120')">Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://picsum.photos/seed/neon2/400/300" alt="Minecraft Account">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">Java Full Access</div>
+                        <div class="specs">
+                            <span class="spec-tag">Unmigrated</span>
+                            <span class="spec-tag">Lifetime Warranty</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price">$4.99</span>
+                            <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('Java FA')">Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="product-card">
+                    <span class="badge" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">Rare</span>
+                    <div class="product-img">
+                        <img src="https://picsum.photos/seed/neon3/400/300" alt="Minecraft Account">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">3-Character OG</div>
+                        <div class="specs">
+                            <span class="spec-tag">"Zx7"</span>
+                            <span class="spec-tag">First Owner</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price">$250</span>
+                            <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('3-Char OG')">Buy</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Common Questions</h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-q">❓ Is the delivery instant?</div>
+                    <div class="faq-a">Yes, our automated system delivers the account credentials directly to your email seconds after payment confirmation.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">❓ What does "Full Access" mean?</div>
+                    <div class="faq-a">You receive full control. You can change the email, password, security questions, and skin. It is yours forever.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">❓ Do you offer refunds?</div>
+                    <div class="faq-a">We offer full replacements for accounts that stop working. Refunds are issued only if a replacement cannot be provided.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">❓ Is it safe to buy here?</div>
+                    <div class="faq-a">Absolutely. We use SSL encryption for all transactions and never store your credit card details.</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- FOOTER -->
     <footer>
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3>VAYLO</h3>
-                    <p>Join our community for giveaways and support.</p>
-                    <div class="social-icons">
-                        <a href="#" class="social-link" title="YouTube"><i class="fab fa-youtube"></i></a>
-                        <a href="#" class="social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" class="social-link" title="Discord"><i class="fab fa-discord"></i></a>
-                    </div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">VAYLO</div>
+                    <p style="color: #666; font-size: 0.9rem; max-width: 300px;">
+                        Elevating the Minecraft account market with security, speed, and style.
+                    </p>
                 </div>
-                <div class="footer-col">
-                    <h3>FAQ</h3>
-                    <div class="faq-item" onclick="this.classList.toggle('active')">
-                        <div class="faq-question">Do you offer a warranty? <i class="fas fa-plus"></i></div>
-                        <div class="faq-answer">Yes, all our accounts come with a lifetime warranty unless specified otherwise.</div>
-                    </div>
-                    <div class="faq-item" onclick="this.classList.toggle('active')">
-                        <div class="faq-question">What payment methods? <i class="fas fa-plus"></i></div>
-                        <div class="faq-answer">We accept Credit Cards, PayPal, and Crypto.</div>
-                    </div>
+                <div class="footer-links">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="#">All Accounts</a></li>
+                        <li><a href="#">Ranked Accounts</a></li>
+                        <li><a href="#">Generators</a></li>
+                    </ul>
                 </div>
-                <div class="footer-col">
-                    <h3>Contact</h3>
-                    <p><i class="fas fa-envelope"></i> support@vaylo.com</p>
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Discord Server</a></li>
+                        <li><a href="#">Ticket System</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="copyright">&copy; 2023 Vaylo. All rights reserved. Not affiliated with Mojang AB.</div>
+            <div style="text-align: center; color: #444; font-size: 0.8rem; padding-top: 20px; border-top: 1px solid #111;">
+                &copy; 2023 Vaylo. Not affiliated with Mojang AB.
+            </div>
         </div>
     </footer>
 
-    <!-- AUTH MODAL -->
-    <div class="modal-overlay" id="auth-modal">
-        <div class="auth-box">
-            <div class="close-modal" onclick="toggleModal()">&times;</div>
-            <h2 style="font-family: var(--font-heading); margin-bottom: 20px; color: var(--accent-color);">Sign In</h2>
-            <button class="provider-btn google-btn" onclick="login('Google')">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="18"> Continue with Google
-            </button>
-        </div>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast">
+        <span style="color: var(--neon-cyan); font-size: 1.2rem;">✓</span>
+        <span id="toast-msg">Added to cart</span>
     </div>
 
+    <!-- SCRIPT -->
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyC57HCyd2pFCcKwnb-y0RZP25gFFdTf6QA",
-            authDomain: "vaylo-da515.firebaseapp.com",
-            projectId: "vaylo-da515",
-            storageBucket: "vaylo-da515.firebasestorage.app",
-            messagingSenderId: "756940721209",
-            appId: "1:756940721209:web:3596ec33e252984c4811e8",
-            measurementId: "G-8C77M7ZS3D"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-
-        function toggleMobileMenu() {
-            document.getElementById('nav-links').classList.toggle('active');
+        // --- 1. TOAST LOGIC ---
+        function addToCart(item) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = `Added "${item}" to cart`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        const app = {
-            currentView: 'home',
-            lastFilter: 'all',
-            currentUser: null,
-            cart: [],
+        // --- 2. PARTICLE SYSTEM ---
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
 
-            products: [
-                { id: 1, name: "Steve_X", rank: "MVP+", cape: true, price: 15.00, desc: "Hypixel MVP+ with email change. Includes rare cape.", img: "https://picsum.photos/seed/mc1/400/300" },
-                { id: 2, name: "NotchWannabe", rank: "ADMIN", cape: false, price: 45.00, desc: "Legacy account with admin status. High value username.", img: "https://picsum.photos/seed/mc2/400/300" },
-                { id: 3, name: "BlockMaster", rank: "VIP", cape: true, price: 12.50, desc: "Clean account with VIP rank on HiveMC. Includes Migrator Cape.", img: "https://picsum.photos/seed/mc3/400/300" },
-                { id: 4, name: "DiamondMiner", rank: "None", cape: false, price: 5.00, desc: "Basic vanilla account. Great for survival gameplay.", img: "https://picsum.photos/seed/mc4/400/300" },
-                { id: 5, name: "Crafter99", rank: "MVP", cape: false, price: 8.00, desc: "Hypixel MVP rank. Good for bedwars practice.", img: "https://picsum.photos/seed/mc5/400/300" },
-                { id: 6, name: "ElytraLord", rank: "MVP++", cape: true, price: 120.00, desc: "Top tier account. MVP++ on Hypixel and includes Million Dollar Cape.", img: "https://picsum.photos/seed/mc6/400/300" }
-            ],
+        // Configuration
+        const particleCount = 70; // Adjust for density
+        const connectionDistance = 150;
+        const particleSpeed = 0.5;
 
-            navigate: function(view, filter = null) {
-                document.getElementById('nav-links').classList.remove('active');
-                document.getElementById('home-section').classList.add('hidden');
-                document.getElementById('shop-section').classList.add('hidden');
-                document.getElementById('product-detail').classList.add('hidden');
-                document.getElementById('cart-section').classList.add('hidden');
-                document.getElementById('mobile-profile').classList.add('hidden'); 
-                
-                if (view === 'home') {
-                    document.getElementById('home-section').classList.remove('hidden');
-                    document.getElementById('home-section').classList.add('fade-in');
-                } else if (view === 'shop') {
-                    this.renderShop(filter);
-                    document.getElementById('shop-section').classList.remove('hidden');
-                    document.getElementById('shop-section').classList.add('fade-in');
-                } else if (view === 'detail') {
-                    document.getElementById('product-detail').classList.remove('hidden');
-                    document.getElementById('product-detail').classList.add('fade-in');
-                } else if (view === 'cart') {
-                    this.renderCart();
-                    document.getElementById('cart-section').classList.remove('hidden');
-                    document.getElementById('cart-section').classList.add('fade-in');
-                }
-                window.scrollTo(0, 0);
-            },
-
-            triggerTextAnimation: function() {
-                const title = document.querySelector('.hero-title');
-                const subtitle = document.querySelector('.hero-subtitle');
-                
-                // Reset animation
-                title.classList.remove('animate-hero-text');
-                subtitle.classList.remove('animate-hero-text');
-                
-                // Force reflow
-                void title.offsetWidth; 
-                void subtitle.offsetWidth;
-                
-                // Add animation
-                title.classList.add('animate-hero-text');
-                subtitle.classList.add('animate-hero-text');
-            },
-
-            showMobileProfile: function() {
-                document.getElementById('home-section').classList.add('hidden');
-                document.getElementById('shop-section').classList.add('hidden');
-                document.getElementById('product-detail').classList.add('hidden');
-                document.getElementById('cart-section').classList.add('hidden');
-                
-                document.getElementById('mobile-profile').classList.remove('hidden');
-                document.getElementById('mobile-profile').classList.add('fade-in');
-
-                document.getElementById('mp-user-name').innerText = this.currentUser.displayName || "Gamer";
-                document.getElementById('mp-user-email').innerText = this.currentUser.email || "user@vaylo.com";
-                document.getElementById('mp-cart-count').innerText = this.cart.length;
-            },
-
-            checkDeviceAndAuth: function() {
-                const isPhone = window.innerWidth < 768;
-                const isLoggedIn = !!this.currentUser;
-                if (isLoggedIn && isPhone) {
-                    if (document.getElementById('mobile-profile').classList.contains('hidden')) {
-                        this.showMobileProfile();
-                    }
-                    document.getElementById('mp-cart-count').innerText = this.cart.length;
-                } else {
-                    document.getElementById('mobile-profile').classList.add('hidden');
-                }
-            },
-
-            renderShop: function(filter) {
-                this.lastFilter = filter || 'all';
-                const grid = document.getElementById('products-grid');
-                const status = document.getElementById('current-filter');
-                grid.innerHTML = ''; 
-                let filteredProducts = this.products;
-
-                if (filter === 'cape') {
-                    filteredProducts = this.products.filter(p => p.cape === true);
-                    status.textContent = "Filter: Capes Only";
-                } else if (filter === 'rank') {
-                    filteredProducts = this.products.filter(p => p.rank !== 'None');
-                    status.textContent = "Filter: High Ranks";
-                } else {
-                    status.textContent = "Showing: All Items";
-                }
-
-                if (filteredProducts.length === 0) {
-                    grid.innerHTML = '<p style="color:#888; grid-column: 1/-1; text-align:center;">No accounts found.</p>';
-                    return;
-                }
-
-                filteredProducts.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card fade-in';
-                    card.onclick = (e) => {
-                        if(e.target.classList.contains('btn-add-cart')) return;
-                        this.openDetail(product.id);
-                    }
-                    card.innerHTML = `
-                        <img src="${product.img}" class="card-img" alt="${product.name}">
-                        <div class="card-body">
-                            <div class="card-title">${product.name} <span class="rank-badge">${product.rank}</span></div>
-                            <div class="card-price">$${product.price.toFixed(2)}</div>
-                            <button class="btn-add-cart" onclick="app.addToCart(${product.id})">Add to Cart</button>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            },
-
-            filterShop: function(type) { this.navigate('shop', type); },
-
-            openDetail: function(id) {
-                const product = this.products.find(p => p.id === id);
-                if (!product) return;
-                const container = document.getElementById('detail-content');
-                container.innerHTML = `
-                    <img src="${product.img}" class="detail-img" alt="${product.name}">
-                    <div class="detail-info">
-                        <h1 class="detail-name">${product.name}</h1>
-                        <div class="detail-tags">
-                            <span><i class="fas fa-crown"></i> ${product.rank}</span>
-                            <span><i class="fas fa-scroll"></i> ${product.cape ? 'Has Cape' : 'No Cape'}</span>
-                        </div>
-                        <p class="detail-desc">${product.desc}</p>
-                        <div class="card-price" style="font-size: 2rem; margin-bottom: 20px;">$${product.price.toFixed(2)}</div>
-                        <button class="btn-shop" onclick="app.addToCart(${product.id})">Add to Cart</button>
-                    </div>
-                `;
-                this.navigate('detail');
-            },
-
-            openCart: function() {
-                if (!this.currentUser) { alert("Please Sign In to view your cart."); toggleModal(); return; }
-                this.navigate('cart');
-            },
-
-            addToCart: function(id) {
-                if (!this.currentUser) { alert("You must be signed in to add items to your cart."); toggleModal(); return; }
-                const product = this.products.find(p => p.id === id);
-                if (product) {
-                    if (this.cart.find(item => item.id === id)) { alert("This item is already in your cart!"); return; }
-                    this.cart.push(product);
-                    this.saveCartToStorage();
-                    this.updateCartBadge();
-                    this.checkDeviceAndAuth(); 
-                    
-                    const btn = event.target;
-                    const originalText = btn.innerText;
-                    btn.innerText = "Added!";
-                    btn.style.background = "var(--accent-color)";
-                    btn.style.color = "black";
-                    setTimeout(() => { btn.innerText = originalText; btn.style.background = ""; btn.style.color = ""; }, 1500);
-                }
-            },
-
-            removeFromCart: function(id) {
-                this.cart = this.cart.filter(item => item.id !== id);
-                this.saveCartToStorage();
-                this.updateCartBadge();
-                this.renderCart();
-                this.checkDeviceAndAuth(); 
-            },
-
-            saveCartToStorage: function() {
-                if (this.currentUser) localStorage.setItem(`vaylo_cart_${this.currentUser.uid}`, JSON.stringify(this.cart));
-            },
-
-            loadCartFromStorage: function() {
-                if (this.currentUser) {
-                    const savedCart = localStorage.getItem(`vaylo_cart_${this.currentUser.uid}`);
-                    this.cart = savedCart ? JSON.parse(savedCart) : [];
-                } else { this.cart = []; }
-                this.updateCartBadge();
-            },
-
-            updateCartBadge: function() { document.getElementById('cart-badge').innerText = this.cart.length; },
-
-            renderCart: function() {
-                const container = document.getElementById('cart-items-container');
-                container.innerHTML = '';
-                if (this.cart.length === 0) {
-                    container.innerHTML = '<p style="padding: 40px; text-align: center; color: #888;">Your cart is currently empty.</p>';
-                    this.updateTotals(0); return;
-                }
-                let subtotal = 0;
-                this.cart.forEach(item => {
-                    subtotal += item.price;
-                    const div = document.createElement('div');
-                    div.className = 'cart-item';
-                    div.innerHTML = `
-                        <img src="${item.img}" alt="${item.name}">
-                        <div class="cart-item-details"><h4>${item.name}</h4><div style="color:var(--accent-color); font-weight:bold;">$${item.price.toFixed(2)}</div></div>
-                        <div class="cart-item-remove" onclick="app.removeFromCart(${item.id})"><i class="fas fa-trash"></i></div>
-                    `;
-                    container.appendChild(div);
-                });
-                this.updateTotals(subtotal);
-            },
-
-            updateTotals: function(subtotal) {
-                const tax = subtotal * 0.05;
-                document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
-                document.getElementById('cart-tax').innerText = `$${tax.toFixed(2)}`;
-                document.getElementById('cart-total').innerText = `$${(subtotal + tax).toFixed(2)}`;
-            },
-
-            checkout: function() { if(this.cart.length === 0) return; alert("Redirecting to payment gateway..."); }
-        };
-
-        function toggleModal() { document.getElementById('auth-modal').classList.toggle('active'); }
-        function login() {
-            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-                .then(toggleModal)
-                .catch((error) => alert("Login failed: " + error.message));
-        }
-        function logout() {
-            auth.signOut().then(() => {
-                app.navigate('home');
-                alert("You have been logged out.");
-            });
+        // Resize canvas
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
         }
 
-        auth.onAuthStateChanged((user) => {
-            const btn = document.getElementById('auth-nav-btn');
-            if (user) {
-                app.currentUser = user;
-                app.loadCartFromStorage();
-                const displayName = user.displayName ? user.displayName.split(' ')[0] : "User";
-                btn.innerHTML = `<i class="fas fa-user-circle"></i> ${displayName}`;
-                btn.onclick = logout;
-                btn.style.borderColor = "#fff"; btn.style.color = "#fff";
-                
-                // --- TRIGGER TEXT ANIMATION ON LOGIN (Desktop Only) ---
-                if(window.innerWidth >= 769) {
-                    app.triggerTextAnimation();
-                }
-
-            } else {
-                app.currentUser = null; app.cart = []; app.updateCartBadge();
-                btn.innerHTML = "Sign In"; btn.onclick = toggleModal;
-                btn.style.borderColor = "var(--accent-color)"; btn.style.color = "var(--accent-color)";
-                
-                // Remove animation class on logout
-                document.querySelector('.hero-title').classList.remove('animate-hero-text');
-                document.querySelector('.hero-subtitle').classList.remove('animate-hero-text');
+        // Particle Class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * particleSpeed;
+                this.vy = (Math.random() - 0.5) * particleSpeed;
+                this.size = Math.random() * 2 + 1;
+                // Randomly choose cyan or purple color for particles
+                this.color = Math.random() > 0.5 ? 'rgba(0, 243, 255, ' : 'rgba(188, 19, 254, '; 
             }
-            app.checkDeviceAndAuth();
-        });
 
-        window.addEventListener('resize', () => { app.checkDeviceAndAuth(); });
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
 
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('auth-modal')) toggleModal();
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + '0.5)';
+                ctx.fill();
+            }
         }
+
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Animation Loop
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw connections first
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(100, 100, 255, ${1 - distance / connectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Update and draw particles
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Event Listeners
+        window.addEventListener('resize', resize);
+        
+        // Start
+        resize();
+        initParticles();
+        animate();
     </script>
 </body>
 </html>
