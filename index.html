@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vaylo | Neon Market</title>
     
-    <!-- Google Fonts: Poppins for a modern, clean look -->
+    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -13,8 +13,8 @@
     <style>
         /* --- CSS VARIABLES (NEON THEME) --- */
         :root {
-            --bg-dark: #050510; /* Very dark blue/black */
-            --bg-card: rgba(255, 255, 255, 0.03); /* Glassmorphism */
+            --bg-dark: #050510; 
+            --bg-card: rgba(255, 255, 255, 0.03);
             --bg-card-hover: rgba(255, 255, 255, 0.08);
             
             --neon-cyan: #00f3ff;
@@ -52,11 +52,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Behind everything */
+            z-index: -1;
             background: radial-gradient(circle at center, #1a1a2e 0%, #050510 100%);
         }
 
-        /* --- UTILITIES & LAYOUT --- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -72,12 +71,6 @@
         @keyframes floatUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes glowPulse {
-            0% { text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); }
-            50% { text-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink); }
-            100% { text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); }
         }
 
         /* --- BUTTONS --- */
@@ -120,6 +113,10 @@
         .btn-neon:hover {
             box-shadow: 0 0 25px rgba(188, 19, 254, 0.6);
             transform: translateY(-2px);
+        }
+
+        .btn-block {
+            width: 100%;
         }
 
         /* --- HEADER --- */
@@ -165,21 +162,94 @@
             color: var(--neon-pink);
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--neon-pink);
-            transition: 0.3s;
-            box-shadow: 0 0 10px var(--neon-pink);
+        /* --- AUTH SCREEN STYLES --- */
+        #auth-screen {
+            display: none; /* Hidden by default, toggled via JS */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .nav-links a:hover::after { width: 100%; }
+        .auth-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.05);
+            text-align: center;
+        }
 
-        /* --- HERO SECTION --- */
+        .auth-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-family: var(--font-main);
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        .auth-switch {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .auth-switch span {
+            color: var(--neon-pink);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: var(--neon-pink);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: none;
+            background: rgba(188, 19, 254, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(188, 19, 254, 0.2);
+        }
+
+        /* --- MAIN APP CONTENT (Store) --- */
+        #app-content {
+            display: none; /* Hidden until logged in */
+        }
+
         .hero {
             padding: 120px 0 80px;
             text-align: center;
@@ -213,11 +283,6 @@
             animation: floatUp 1.2s ease-out;
         }
 
-        .hero-btns {
-            animation: floatUp 1.4s ease-out;
-        }
-
-        /* --- STORE SECTION --- */
         .section-padding { padding: 80px 0; }
         
         .section-header {
@@ -229,10 +294,6 @@
             font-size: 2.5rem;
             margin-bottom: 10px;
             text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-
-        .section-header p {
-            color: var(--text-muted);
         }
 
         .filters {
@@ -477,159 +538,190 @@
                 <a href="#features">Features</a>
                 <a href="#faq">FAQ</a>
             </nav>
-            <button class="btn btn-neon" onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})">Get Started</button>
+            <div>
+                <!-- Logout Button (Hidden by default) -->
+                <button id="logout-btn" class="btn btn-primary" style="display: none;">Logout</button>
+            </div>
         </div>
     </header>
 
-    <!-- HERO -->
-    <section id="home" class="hero">
-        <div class="container">
-            <h1>
-                Next Gen
-                <span>Minecraft Accounts</span>
-            </h1>
-            <p>Secure, high-quality, full-access accounts delivered instantly. Upgrade your experience with Vaylo's premium marketplace.</p>
-            <div class="hero-btns">
-                <button class="btn btn-primary" onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})">Browse Store</button>
-                <button class="btn btn-neon" style="margin-left: 15px;">Join Discord</button>
+    <!-- AUTHENTICATION SCREEN -->
+    <div id="auth-screen">
+        <div class="auth-card">
+            <h2 class="auth-title" id="auth-title-text">Welcome Back</h2>
+            
+            <div id="auth-error" class="error-message"></div>
+
+            <form id="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-neon btn-block" id="auth-submit-btn">Sign In</button>
+            </form>
+
+            <div class="auth-switch">
+                <p id="switch-text">Don't have an account? <span id="toggle-auth-mode">Sign Up</span></p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- STORE -->
-    <section id="store" class="section-padding">
-        <div class="container">
-            <div class="section-header">
-                <h2>Featured Accounts</h2>
-                <p>Hand-picked accounts with the best stats and security.</p>
+    <!-- MAIN APP CONTENT (Dashboard/Store) -->
+    <div id="app-content">
+        <!-- HERO -->
+        <section id="home" class="hero">
+            <div class="container">
+                <h1>
+                    Next Gen
+                    <span>Minecraft Accounts</span>
+                </h1>
+                <p>Secure, high-quality, full-access accounts delivered instantly. Upgrade your experience with Vaylo's premium marketplace.</p>
+                <div class="hero-btns">
+                    <button class="btn btn-primary" onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})">Browse Store</button>
+                    <button class="btn btn-neon" style="margin-left: 15px;">Join Discord</button>
+                </div>
             </div>
+        </section>
 
-            <div class="filters">
-                <button class="filter-btn active">All</button>
-                <button class="filter-btn">Hypixel Ranked</button>
-                <button class="filter-btn">Full Access</button>
-                <button class="filter-btn">OG Names</button>
-            </div>
-
-            <div class="products-grid">
-                <!-- Card 1 -->
-                <div class="product-card">
-                    <span class="badge">Hot</span>
-                    <div class="product-img">
-                        <img src="https://picsum.photos/seed/neon1/400/300" alt="Minecraft Account">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">Hypixel MVP+</div>
-                        <div class="specs">
-                            <span class="spec-tag">Level 120+</span>
-                            <span class="spec-tag">Bedwars God</span>
-                        </div>
-                        <div class="price-row">
-                            <span class="price">$24.99</span>
-                            <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('Hypixel MVP+ Level 120')">Buy</button>
-                        </div>
-                    </div>
+        <!-- STORE -->
+        <section id="store" class="section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Featured Accounts</h2>
+                    <p>Hand-picked accounts with the best stats and security.</p>
                 </div>
 
-                <!-- Card 2 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="https://picsum.photos/seed/neon2/400/300" alt="Minecraft Account">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">Java Full Access</div>
-                        <div class="specs">
-                            <span class="spec-tag">Unmigrated</span>
-                            <span class="spec-tag">Lifetime Warranty</span>
-                        </div>
-                        <div class="price-row">
-                            <span class="price">$4.99</span>
-                            <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('Java FA')">Buy</button>
-                        </div>
-                    </div>
+                <div class="filters">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Hypixel Ranked</button>
+                    <button class="filter-btn">Full Access</button>
+                    <button class="filter-btn">OG Names</button>
                 </div>
 
-                <!-- Card 3 -->
-                <div class="product-card">
-                    <span class="badge" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">Rare</span>
-                    <div class="product-img">
-                        <img src="https://picsum.photos/seed/neon3/400/300" alt="Minecraft Account">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">3-Character OG</div>
-                        <div class="specs">
-                            <span class="spec-tag">"Zx7"</span>
-                            <span class="spec-tag">First Owner</span>
+                <div class="products-grid">
+                    <!-- Card 1 -->
+                    <div class="product-card">
+                        <span class="badge">Hot</span>
+                        <div class="product-img">
+                            <img src="https://picsum.photos/seed/neon1/400/300" alt="Minecraft Account">
                         </div>
-                        <div class="price-row">
-                            <span class="price">$250</span>
-                            <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('3-Char OG')">Buy</button>
+                        <div class="product-info">
+                            <div class="product-title">Hypixel MVP+</div>
+                            <div class="specs">
+                                <span class="spec-tag">Level 120+</span>
+                                <span class="spec-tag">Bedwars God</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="price">$24.99</span>
+                                <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('Hypixel MVP+ Level 120')">Buy</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="section-padding">
-        <div class="container">
-            <div class="section-header">
-                <h2>Common Questions</h2>
-            </div>
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <div class="faq-q">❓ Is the delivery instant?</div>
-                    <div class="faq-a">Yes, our automated system delivers the account credentials directly to your email seconds after payment confirmation.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-q">❓ What does "Full Access" mean?</div>
-                    <div class="faq-a">You receive full control. You can change the email, password, security questions, and skin. It is yours forever.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-q">❓ Do you offer refunds?</div>
-                    <div class="faq-a">We offer full replacements for accounts that stop working. Refunds are issued only if a replacement cannot be provided.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-q">❓ Is it safe to buy here?</div>
-                    <div class="faq-a">Absolutely. We use SSL encryption for all transactions and never store your credit card details.</div>
-                </div>
-            </div>
-        </div>
-    </section>
+                    <!-- Card 2 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://picsum.photos/seed/neon2/400/300" alt="Minecraft Account">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">Java Full Access</div>
+                            <div class="specs">
+                                <span class="spec-tag">Unmigrated</span>
+                                <span class="spec-tag">Lifetime Warranty</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="price">$4.99</span>
+                                <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('Java FA')">Buy</button>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="footer-logo">VAYLO</div>
-                    <p style="color: #666; font-size: 0.9rem; max-width: 300px;">
-                        Elevating the Minecraft account market with security, speed, and style.
-                    </p>
-                </div>
-                <div class="footer-links">
-                    <h4>Shop</h4>
-                    <ul>
-                        <li><a href="#">All Accounts</a></li>
-                        <li><a href="#">Ranked Accounts</a></li>
-                        <li><a href="#">Generators</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Discord Server</a></li>
-                        <li><a href="#">Ticket System</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
+                    <!-- Card 3 -->
+                    <div class="product-card">
+                        <span class="badge" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">Rare</span>
+                        <div class="product-img">
+                            <img src="https://picsum.photos/seed/neon3/400/300" alt="Minecraft Account">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">3-Character OG</div>
+                            <div class="specs">
+                                <span class="spec-tag">"Zx7"</span>
+                                <span class="spec-tag">First Owner</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="price">$250</span>
+                                <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('3-Char OG')">Buy</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div style="text-align: center; color: #444; font-size: 0.8rem; padding-top: 20px; border-top: 1px solid #111;">
-                &copy; 2023 Vaylo. Not affiliated with Mojang AB.
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Common Questions</h2>
+                </div>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-q">❓ Is the delivery instant?</div>
+                        <div class="faq-a">Yes, our automated system delivers the account credentials directly to your email seconds after payment confirmation.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q">❓ What does "Full Access" mean?</div>
+                        <div class="faq-a">You receive full control. You can change the email, password, security questions, and skin. It is yours forever.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q">❓ Do you offer refunds?</div>
+                        <div class="faq-a">We offer full replacements for accounts that stop working. Refunds are issued only if a replacement cannot be provided.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q">❓ Is it safe to buy here?</div>
+                        <div class="faq-a">Absolutely. We use SSL encryption for all transactions and never store your credit card details.</div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </footer>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="footer-logo">VAYLO</div>
+                        <p style="color: #666; font-size: 0.9rem; max-width: 300px;">
+                            Elevating the Minecraft account market with security, speed, and style.
+                        </p>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Shop</h4>
+                        <ul>
+                            <li><a href="#">All Accounts</a></li>
+                            <li><a href="#">Ranked Accounts</a></li>
+                            <li><a href="#">Generators</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Discord Server</a></li>
+                            <li><a href="#">Ticket System</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="text-align: center; color: #444; font-size: 0.8rem; padding-top: 20px; border-top: 1px solid #111;">
+                    &copy; 2023 Vaylo. Not affiliated with Mojang AB.
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <!-- TOAST NOTIFICATION -->
     <div id="toast" class="toast">
@@ -637,7 +729,122 @@
         <span id="toast-msg">Added to cart</span>
     </div>
 
-    <!-- SCRIPT -->
+    <!-- FIREBASE SDK & LOGIC -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzvglKAYm9pruxMOViL27pTAOjO2q6GiA",
+            authDomain: "vaylov2.firebaseapp.com",
+            projectId: "vaylov2",
+            storageBucket: "vaylov2.firebasestorage.app",
+            messagingSenderId: "757155788329",
+            appId: "1:757155788329:web:abbba23e574d327e808e38"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // DOM Elements
+        const authScreen = document.getElementById('auth-screen');
+        const appContent = document.getElementById('app-content');
+        const authForm = document.getElementById('auth-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const authTitle = document.getElementById('auth-title-text');
+        const authSubmitBtn = document.getElementById('auth-submit-btn');
+        const toggleAuthMode = document.getElementById('toggle-auth-mode');
+        const switchText = document.getElementById('switch-text');
+        const authError = document.getElementById('auth-error');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // State
+        let isLoginMode = true;
+
+        // Toggle between Login and Signup
+        toggleAuthMode.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            authError.style.display = 'none';
+            if (isLoginMode) {
+                authTitle.innerText = 'Welcome Back';
+                authSubmitBtn.innerText = 'Sign In';
+                switchText.innerHTML = 'Don\'t have an account? <span id="toggle-auth-mode">Sign Up</span>';
+            } else {
+                authTitle.innerText = 'Create Account';
+                authSubmitBtn.innerText = 'Sign Up';
+                switchText.innerHTML = 'Already have an account? <span id="toggle-auth-mode">Sign In</span>';
+            }
+            // Re-attach listener to new span element
+            document.getElementById('toggle-auth-mode').addEventListener('click', arguments.callee);
+        });
+
+        // Handle Form Submission
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            authError.style.display = 'none';
+
+            try {
+                if (isLoginMode) {
+                    // Sign In
+                    await signInWithEmailAndPassword(auth, email, password);
+                    // Redirect happens automatically via onAuthStateChanged
+                } else {
+                    // Sign Up
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    // Redirect happens automatically via onAuthStateChanged
+                }
+            } catch (error) {
+                authError.style.display = 'block';
+                const errorCode = error.code;
+                
+                if (errorCode === 'auth/invalid-credential' || errorCode === 'auth/wrong-password') {
+                    authError.innerText = "Email or password is incorrect";
+                } else if (errorCode === 'auth/email-already-in-use') {
+                    authError.innerText = "User already exists. Please sign in";
+                } else {
+                    authError.innerText = error.message;
+                }
+            }
+        });
+
+        // Handle Logout
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error("Logout Error", error);
+            }
+        });
+
+        // Auth State Observer (Controls Visibility)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                authScreen.style.display = 'none';
+                appContent.style.display = 'block';
+                logoutBtn.style.display = 'inline-flex';
+            } else {
+                // User is signed out
+                authScreen.style.display = 'flex';
+                appContent.style.display = 'none';
+                logoutBtn.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- EXISTING JS (Particles & UI Interactions) -->
     <script>
         // --- 1. TOAST LOGIC ---
         function addToCart(item) {
@@ -654,18 +861,15 @@
         let width, height;
         let particles = [];
 
-        // Configuration
-        const particleCount = 70; // Adjust for density
+        const particleCount = 70; 
         const connectionDistance = 150;
         const particleSpeed = 0.5;
 
-        // Resize canvas
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
         }
 
-        // Particle Class
         class Particle {
             constructor() {
                 this.x = Math.random() * width;
@@ -673,7 +877,6 @@
                 this.vx = (Math.random() - 0.5) * particleSpeed;
                 this.vy = (Math.random() - 0.5) * particleSpeed;
                 this.size = Math.random() * 2 + 1;
-                // Randomly choose cyan or purple color for particles
                 this.color = Math.random() > 0.5 ? 'rgba(0, 243, 255, ' : 'rgba(188, 19, 254, '; 
             }
 
@@ -681,7 +884,6 @@
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // Bounce off edges
                 if (this.x < 0 || this.x > width) this.vx *= -1;
                 if (this.y < 0 || this.y > height) this.vy *= -1;
             }
@@ -694,7 +896,6 @@
             }
         }
 
-        // Initialize particles
         function initParticles() {
             particles = [];
             for (let i = 0; i < particleCount; i++) {
@@ -702,11 +903,9 @@
             }
         }
 
-        // Animation Loop
         function animate() {
             ctx.clearRect(0, 0, width, height);
 
-            // Draw connections first
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -724,7 +923,6 @@
                 }
             }
 
-            // Update and draw particles
             particles.forEach(p => {
                 p.update();
                 p.draw();
@@ -733,10 +931,7 @@
             requestAnimationFrame(animate);
         }
 
-        // Event Listeners
         window.addEventListener('resize', resize);
-        
-        // Start
         resize();
         initParticles();
         animate();
