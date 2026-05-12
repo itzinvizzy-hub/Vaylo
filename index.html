@@ -3,745 +3,496 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vaylo | Neon Market</title>
-    
-    <!-- Google Fonts: Poppins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-
+    <title>VAYLO | Premium Accounts</title>
     <style>
-        /* --- CSS VARIABLES (NEON THEME) --- */
+        /* --- CSS VARIABLES & RESET --- */
         :root {
-            --bg-dark: #050510; 
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            
-            --neon-cyan: #00f3ff;
-            --neon-pink: #bc13fe;
-            --neon-purple: #5e17eb;
-            
+            --bg-dark: #050505;
+            --bg-card: #111111;
+            --bg-overlay: rgba(10, 10, 10, 0.95);
             --text-main: #ffffff;
-            --text-muted: #a0a0c0;
-            
-            --font-main: 'Poppins', sans-serif;
-            
-            --glow-cyan: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
-            --glow-pink: 0 0 10px rgba(188, 19, 254, 0.5), 0 0 20px rgba(188, 19, 254, 0.3);
+            --text-muted: #888888;
+            --accent-lime: #32CD32;
+            --accent-lime-dim: rgba(50, 205, 50, 0.2);
+            --danger: #ff4444;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
             font-family: var(--font-main);
-            line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             position: relative;
         }
 
-        /* --- BACKGROUND CANVAS --- */
-        #particles-canvas {
+        /* --- PARTICLE BACKGROUND --- */
+        #particles {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at center, #1a1a2e 0%, #050510 100%);
+            pointer-events: none;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        ul { list-style: none; }
-
-        /* --- ANIMATIONS --- */
-        @keyframes floatUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- BUTTONS --- */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 30px;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            border: none;
-            font-family: var(--font-main);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            background: transparent;
-            color: var(--neon-cyan);
-            border: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-        }
-
-        .btn-primary:hover {
-            background: var(--neon-cyan);
-            color: #000;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .btn-neon {
-            background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink));
-            color: white;
-            border: none;
-        }
-
-        .btn-neon:hover {
-            box-shadow: 0 0 25px rgba(188, 19, 254, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        /* --- HEADER --- */
-        header {
-            background: rgba(5, 5, 16, 0.8);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 15px 0;
-        }
-
-        .nav-container {
+        /* --- NAVIGATION --- */
+        nav {
+            background-color: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(12px);
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #222;
         }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: 900;
-            letter-spacing: -1px;
-            background: linear-gradient(to right, #fff, var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .logo { 
+            font-size: 1.8rem; 
+            font-weight: 900; 
+            color: var(--accent-lime); 
+            letter-spacing: 2px; 
+            cursor: pointer;
             text-transform: uppercase;
         }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-        }
-
-        .nav-links a {
-            font-weight: 500;
-            font-size: 0.95rem;
-            position: relative;
-            color: var(--text-muted);
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--neon-pink);
-        }
-
-        /* --- AUTH SCREEN STYLES --- */
-        #auth-screen {
-            display: none; /* Hidden by default, toggled via JS */
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .auth-card {
-            background: var(--bg-card);
-            padding: 40px;
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { color: #fff; font-weight: 500; cursor: pointer; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-lime); }
+        
+        .nav-actions { display: flex; gap: 15px; align-items: center; position: relative; }
+        
+        /* Search Bar */
+        .search-container { position: relative; }
+        .search-bar {
+            background-color: #111;
+            border: 1px solid #333;
+            padding: 10px 15px;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 100%;
-            max-width: 400px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.05);
-            text-align: center;
-        }
-
-        .auth-title {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            background: linear-gradient(to right, var(--neon-cyan), var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: white;
-            font-family: var(--font-main);
-            outline: none;
+            color: #fff;
+            width: 220px;
             transition: 0.3s;
         }
-
-        .form-input:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-
-        .auth-switch {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .auth-switch span {
-            color: var(--neon-pink);
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .error-message {
-            color: var(--neon-pink);
-            font-size: 0.85rem;
-            margin-bottom: 15px;
-            display: none;
-            background: rgba(188, 19, 254, 0.1);
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid rgba(188, 19, 254, 0.2);
-        }
-
-        /* --- MAIN APP CONTENT (Store) --- */
-        #app-content {
-            display: none; /* Hidden until logged in */
-        }
-
-        .hero {
-            padding: 120px 0 80px;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 4.5rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #ffffff 30%, var(--neon-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: floatUp 1s ease-out;
-        }
+        .search-bar:focus { border-color: var(--accent-lime); width: 260px; outline: none; }
         
-        .hero h1 span {
-            display: block;
-            background: linear-gradient(to right, var(--neon-pink), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Search Dropdown */
+        .search-dropdown {
+            position: absolute;
+            top: 45px;
+            left: 0;
+            width: 260px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .search-dropdown.show { display: block; }
+        .dropdown-item { padding: 10px 15px; color: #ccc; cursor: pointer; border-bottom: 1px solid #222; }
+        .dropdown-item:hover { background: var(--accent-lime); color: #000; }
+        .dropdown-item:last-child { border-bottom: none; }
+
+        /* Cart & Auth Buttons */
+        .cart-btn {
+            position: relative;
+            background: transparent;
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: var(--accent-lime);
+            color: #000;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-weight: bold;
         }
 
-        .hero p {
-            font-size: 1.2rem;
+        .auth-btn {
+            background: transparent;
+            border: 1px solid var(--accent-lime);
+            color: var(--accent-lime);
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .auth-btn:hover { background: var(--accent-lime); color: #000; }
+        
+        /* Profile Button (Logged In State) */
+        .profile-btn {
+            background: var(--accent-lime);
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .profile-menu {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            width: 150px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .profile-menu.show { display: flex; }
+        .menu-item { padding: 10px; cursor: pointer; color: #fff; font-size: 0.9rem; }
+        .menu-item:hover { background: #222; color: var(--accent-lime); }
+
+        /* --- PAGE SECTIONS --- */
+        .page-section {
+            display: none; /* Hidden by default */
+            padding: 50px 5%;
+            animation: fadeIn 0.5s ease;
+            flex: 1;
+        }
+        .page-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HOME PAGE --- */
+        #page-home {
+            text-align: center;
+            padding-top: 150px;
+            padding-bottom: 100px;
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+        }
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+        .hero-subtitle {
+            font-size: 1.3rem;
             color: var(--text-muted);
             margin-bottom: 40px;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-            animation: floatUp 1.2s ease-out;
         }
-
-        .section-padding { padding: 80px 0; }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-
-        .filters {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: rgba(255,255,255,0.05);
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 8px 20px;
-            border-radius: 30px;
+        .hero-btn {
+            background: var(--accent-lime);
+            color: #000;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: 0.3s;
-            font-family: var(--font-main);
         }
+        .hero-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent-lime-dim); }
 
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--neon-purple);
-            color: white;
-            border-color: var(--neon-purple);
-            box-shadow: 0 0 15px rgba(94, 23, 235, 0.5);
-        }
-
-        .products-grid {
+        /* --- SHOP PAGE --- */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .section-title { font-size: 2.5rem; color: #fff; }
+        
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 30px;
         }
-
         .product-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
+            background-color: var(--bg-card);
+            border-radius: 12px;
             overflow: hidden;
-            backdrop-filter: blur(10px);
+            border: 1px solid #222;
             transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            cursor: pointer;
         }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--neon-cyan);
-            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.15);
-        }
-
-        .badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid var(--neon-pink);
-            color: var(--neon-pink);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(188, 19, 254, 0.2);
-        }
-
-        .product-img {
-            height: 180px;
-            background-color: #111;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .product-img img {
+        .product-card:hover { transform: translateY(-8px); border-color: var(--accent-lime); }
+        .product-img { width: 100%; height: 200px; object-fit: cover; }
+        .product-info { padding: 20px; }
+        .product-name { font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; }
+        .product-type { font-size: 0.8rem; color: var(--accent-lime); text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .product-price { font-size: 1.2rem; color: #fff; margin-bottom: 15px; display: block; }
+        .btn-add {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: 0.5s;
-            opacity: 0.8;
+            padding: 10px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #333;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
         }
+        .btn-add:hover { background: #333; border-color: #fff; }
+        .btn-add:active { transform: scale(0.98); }
 
-        .product-card:hover .product-img img {
-            transform: scale(1.1);
-            opacity: 1;
+        /* --- CART PAGE --- */
+        .cart-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #111;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #222;
         }
-
-        .product-info {
-            padding: 25px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .specs {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .spec-tag {
-            font-size: 0.75rem;
-            color: var(--neon-cyan);
-            background: rgba(0, 243, 255, 0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .price-row {
-            margin-top: auto;
+        .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 0;
+            border-bottom: 1px solid #222;
         }
-
-        .price {
+        .cart-item-details { display: flex; align-items: center; gap: 20px; }
+        .cart-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+        .cart-remove {
+            color: var(--danger);
+            background: transparent;
+            border: 1px solid var(--danger);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .cart-remove:hover { background: var(--danger); color: #fff; }
+        .cart-total {
+            text-align: right;
+            margin-top: 30px;
             font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        /* --- FAQ SECTION --- */
-        .faq-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 20px;
-        }
-
-        .faq-item {
-            background: var(--bg-card);
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.3s;
-        }
-
-        .faq-item:hover {
-            border-color: var(--neon-purple);
-            box-shadow: 0 5px 15px rgba(94, 23, 235, 0.2);
-        }
-
-        .faq-q {
-            font-weight: 700;
-            color: var(--neon-cyan);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .faq-a {
-            color: var(--text-muted);
-            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--accent-lime);
         }
 
         /* --- FOOTER --- */
         footer {
-            background: #02020a;
-            padding: 60px 0 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            margin-top: 50px;
+            background-color: #000;
+            padding: 40px 5% 20px 5%;
+            border-top: 1px solid #111;
+            margin-top: auto;
         }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 40px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
+        .footer-col h4 { color: #fff; margin-bottom: 15px; }
+        .footer-col ul li { color: #666; margin-bottom: 8px; font-size: 0.9rem; cursor: pointer; }
+        .footer-col ul li:hover { color: var(--accent-lime); }
 
-        .footer-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-        }
-
-        .footer-links h4 {
-            color: white;
-            margin-bottom: 15px;
-        }
-        
-        .footer-links ul li { margin-bottom: 8px; }
-        .footer-links a:hover { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); }
-
-        /* --- TOAST --- */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(10, 10, 20, 0.9);
-            border: 1px solid var(--neon-cyan);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            display: flex;
+        /* --- MODALS --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-            z-index: 1000;
-            font-family: var(--font-main);
         }
-        
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
+        .modal-overlay.active { display: flex; }
+        .auth-box {
+            background: #111;
+            padding: 40px;
+            border-radius: 12px;
+            width: 90%; max-width: 400px;
+            border: 1px solid #333;
+            text-align: center;
+            position: relative;
         }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #666; }
+        .form-input { width: 100%; padding: 12px; margin: 10px 0; background: #050505; border: 1px solid #333; color: #fff; border-radius: 4px; }
+        .btn-primary { width: 100%; padding: 12px; background: var(--accent-lime); border: none; color: #000; font-weight: bold; cursor: pointer; margin-top: 10px; border-radius: 4px; }
+        .switch-auth { margin-top: 20px; font-size: 0.9rem; color: #888; cursor: pointer; }
+        .switch-auth span { color: var(--accent-lime); text-decoration: underline; }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 3rem; }
-            .nav-links { display: none; }
-            .faq-grid { grid-template-columns: 1fr; }
+        /* Full Tab Product */
+        .full-tab-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 3000;
+            display: none; flex-direction: column;
+            overflow-y: auto;
         }
+        .full-tab-overlay.open { display: flex; }
+        .tab-header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: #111; border-bottom: 1px solid #222; position: sticky; top: 0; }
+        .tab-content { padding: 50px 10%; display: flex; flex-wrap: wrap; gap: 40px; }
+        .tab-img { width: 100%; max-width: 500px; border-radius: 10px; }
+        .tab-details { flex: 1; min-width: 300px; }
+
     </style>
 </head>
 <body>
 
-    <!-- PARTICLE BACKGROUND CANVAS -->
-    <canvas id="particles-canvas"></canvas>
+    <!-- Particle Canvas -->
+    <canvas id="particles"></canvas>
 
-    <!-- NAV -->
-    <header>
-        <div class="container nav-container">
-            <a href="#" class="logo">VAYLO</a>
-            <nav class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#store">Accounts</a>
-                <a href="#features">Features</a>
-                <a href="#faq">FAQ</a>
-            </nav>
-            <div>
-                <!-- Logout Button (Hidden by default) -->
-                <button id="logout-btn" class="btn btn-primary" style="display: none;">Logout</button>
-            </div>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" onclick="navigateTo('home')">VAYLO</div>
+        
+        <div class="nav-links">
+            <a onclick="navigateTo('home')" id="link-home">Home</a>
+            <a onclick="navigateTo('shop')" id="link-shop">Shop</a>
         </div>
-    </header>
 
-    <!-- AUTHENTICATION SCREEN -->
-    <div id="auth-screen">
-        <div class="auth-card">
-            <h2 class="auth-title" id="auth-title-text">Welcome Back</h2>
+        <div class="nav-actions">
+            <div class="search-container">
+                <input type="text" class="search-bar" id="search-input" placeholder="Search types...">
+                <div class="search-dropdown" id="search-dropdown">
+                    <!-- Suggestions injected JS -->
+                </div>
+            </div>
             
-            <div id="auth-error" class="error-message"></div>
+            <button class="cart-btn" onclick="navigateTo('cart')">
+                CART <span class="cart-count" id="cart-count">0</span>
+            </button>
+            
+            <!-- Auth Buttons (Dynamic) -->
+            <div id="auth-buttons-container">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </nav>
 
-            <form id="auth-form">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn btn-neon btn-block" id="auth-submit-btn">Sign In</button>
-            </form>
+    <!-- 1. HOME PAGE -->
+    <section id="page-home" class="page-section active">
+        <h1 class="hero-title">Welcome to Vaylo</h1>
+        <p class="hero-subtitle">The ultimate marketplace for Minecraft Full Access, Ranks, and Cosmetics. Secure, instant, and exclusively for you.</p>
+        <button class="hero-btn" onclick="navigateTo('shop')">Start Shopping</button>
+    </section>
 
-            <div class="auth-switch">
-                <p id="switch-text">Don't have an account? <span id="toggle-auth-mode">Sign Up</span></p>
+    <!-- 2. SHOP PAGE -->
+    <section id="page-shop" class="page-section">
+        <div class="section-header">
+            <h2 class="section-title">Latest Drops</h2>
+            <span style="color: #666;" id="shop-status">Showing all items</span>
+        </div>
+        <div class="product-grid" id="product-grid">
+            <!-- Products injected JS -->
+        </div>
+    </section>
+
+    <!-- 3. CART PAGE -->
+    <section id="page-cart" class="page-section">
+        <div class="section-header">
+            <h2 class="section-title">Your Cart</h2>
+        </div>
+        <div class="cart-container" id="cart-container">
+            <p style="color: #666; text-align: center;">Your cart is empty.</p>
+        </div>
+        <div class="cart-total" id="cart-total"></div>
+        <div style="text-align: right; margin-top: 20px;">
+            <button class="hero-btn" onclick="alert('Checkout API pending.')">Checkout</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Shop</h4>
+                <ul>
+                    <li onclick="filterShop('Full Access')">Full Access</li>
+                    <li onclick="filterShop('Hypixel')">Hypixel Ranks</li>
+                    <li onclick="filterShop('Gift Codes')">Gift Codes</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul>
+                    <li>FAQ</li>
+                    <li>Contact Us</li>
+                    <li>Terms of Service</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Newsletter</h4>
+                <input type="email" class="form-input" placeholder="Enter email" style="background:#111;">
+                <button class="btn-primary" style="background: #333; color: #fff;">Subscribe</button>
+            </div>
+            <div class="footer-col">
+                <h4>Payments</h4>
+                <p style="color: #666; font-size: 0.9rem;">Crypto • Visa • PayPal • Apple Pay</p>
+            </div>
+        </div>
+        <div style="text-align: center; color: #444; font-size: 0.8rem; margin-top: 20px;">
+            &copy; 2023 VAYLO. Not affiliated with Mojang AB.
+        </div>
+    </footer>
+
+    <!-- AUTH MODAL -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="auth-box">
+            <span class="close-modal" onclick="toggleAuthModal(false)">&times;</span>
+            <div id="login-view">
+                <h2 style="color: var(--accent-lime); margin-bottom: 20px;">Sign In</h2>
+                <input type="email" id="login-email" class="form-input" placeholder="Email">
+                <input type="password" id="login-pass" class="form-input" placeholder="Password">
+                <button class="btn-primary" onclick="handleLogin()">Sign In</button>
+                <button class="btn-primary" onclick="handleGoogleAuth()" style="background: #fff; color: #000; margin-top: 10px;">Sign in with Google</button>
+                <div class="switch-auth">New? <span onclick="toggleAuthView('signup')">Create Account</span></div>
+            </div>
+            <div id="signup-view" style="display: none;">
+                <h2 style="color: var(--accent-lime); margin-bottom: 20px;">Sign Up</h2>
+                <input type="email" id="signup-email" class="form-input" placeholder="Email">
+                <input type="password" id="signup-pass" class="form-input" placeholder="Password">
+                <button class="btn-primary" onclick="handleSignup()">Create Account</button>
+                <button class="btn-primary" onclick="handleGoogleAuth()" style="background: #fff; color: #000; margin-top: 10px;">Sign up with Google</button>
+                <div class="switch-auth">Have account? <span onclick="toggleAuthView('login')">Sign In</span></div>
             </div>
         </div>
     </div>
 
-    <!-- MAIN APP CONTENT (Dashboard/Store) -->
-    <div id="app-content">
-        <!-- HERO -->
-        <section id="home" class="hero">
-            <div class="container">
-                <h1>
-                    Next Gen
-                    <span>Minecraft Accounts</span>
-                </h1>
-                <p>Secure, high-quality, full-access accounts delivered instantly. Upgrade your experience with Vaylo's premium marketplace.</p>
-                <div class="hero-btns">
-                    <button class="btn btn-primary" onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})">Browse Store</button>
-                    <button class="btn btn-neon" style="margin-left: 15px;">Join Discord</button>
+    <!-- PRODUCT FULL TAB -->
+    <div class="full-tab-overlay" id="product-tab">
+        <div class="tab-header">
+            <div class="logo">VAYLO</div>
+            <button class="hero-btn" style="padding: 8px 20px; font-size: 0.9rem;" onclick="closeProductTab()">Back</button>
+        </div>
+        <div class="tab-content">
+            <img src="" id="tab-img" class="tab-img">
+            <div class="tab-details">
+                <h1 id="tab-title" style="font-size: 2.5rem; color: var(--accent-lime); margin-bottom: 10px;">Title</h1>
+                <h2 id="tab-price" style="font-size: 2rem; margin-bottom: 20px;">$0.00</h2>
+                <p id="tab-desc" style="color: #ccc; line-height: 1.6; margin-bottom: 30px;">Description</p>
+                <div class="features-list" style="margin-bottom: 30px;">
+                    <div style="margin-bottom: 10px;">✓ Instant Delivery</div>
+                    <div style="margin-bottom: 10px;">✓ Secure Transfer</div>
                 </div>
+                <button class="hero-btn" id="tab-add-btn">Add to Cart</button>
             </div>
-        </section>
-
-        <!-- STORE -->
-        <section id="store" class="section-padding">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Featured Accounts</h2>
-                    <p>Hand-picked accounts with the best stats and security.</p>
-                </div>
-
-                <div class="filters">
-                    <button class="filter-btn active">All</button>
-                    <button class="filter-btn">Hypixel Ranked</button>
-                    <button class="filter-btn">Full Access</button>
-                    <button class="filter-btn">OG Names</button>
-                </div>
-
-                <div class="products-grid">
-                    <!-- Card 1 -->
-                    <div class="product-card">
-                        <span class="badge">Hot</span>
-                        <div class="product-img">
-                            <img src="https://picsum.photos/seed/neon1/400/300" alt="Minecraft Account">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-title">Hypixel MVP+</div>
-                            <div class="specs">
-                                <span class="spec-tag">Level 120+</span>
-                                <span class="spec-tag">Bedwars God</span>
-                            </div>
-                            <div class="price-row">
-                                <span class="price">$24.99</span>
-                                <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('Hypixel MVP+ Level 120')">Buy</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div class="product-card">
-                        <div class="product-img">
-                            <img src="https://picsum.photos/seed/neon2/400/300" alt="Minecraft Account">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-title">Java Full Access</div>
-                            <div class="specs">
-                                <span class="spec-tag">Unmigrated</span>
-                                <span class="spec-tag">Lifetime Warranty</span>
-                            </div>
-                            <div class="price-row">
-                                <span class="price">$4.99</span>
-                                <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('Java FA')">Buy</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div class="product-card">
-                        <span class="badge" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">Rare</span>
-                        <div class="product-img">
-                            <img src="https://picsum.photos/seed/neon3/400/300" alt="Minecraft Account">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-title">3-Character OG</div>
-                            <div class="specs">
-                                <span class="spec-tag">"Zx7"</span>
-                                <span class="spec-tag">First Owner</span>
-                            </div>
-                            <div class="price-row">
-                                <span class="price">$250</span>
-                                <button class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;" onclick="addToCart('3-Char OG')">Buy</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ -->
-        <section id="faq" class="section-padding">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Common Questions</h2>
-                </div>
-                <div class="faq-grid">
-                    <div class="faq-item">
-                        <div class="faq-q">❓ Is the delivery instant?</div>
-                        <div class="faq-a">Yes, our automated system delivers the account credentials directly to your email seconds after payment confirmation.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-q">❓ What does "Full Access" mean?</div>
-                        <div class="faq-a">You receive full control. You can change the email, password, security questions, and skin. It is yours forever.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-q">❓ Do you offer refunds?</div>
-                        <div class="faq-a">We offer full replacements for accounts that stop working. Refunds are issued only if a replacement cannot be provided.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-q">❓ Is it safe to buy here?</div>
-                        <div class="faq-a">Absolutely. We use SSL encryption for all transactions and never store your credit card details.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer>
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-brand">
-                        <div class="footer-logo">VAYLO</div>
-                        <p style="color: #666; font-size: 0.9rem; max-width: 300px;">
-                            Elevating the Minecraft account market with security, speed, and style.
-                        </p>
-                    </div>
-                    <div class="footer-links">
-                        <h4>Shop</h4>
-                        <ul>
-                            <li><a href="#">All Accounts</a></li>
-                            <li><a href="#">Ranked Accounts</a></li>
-                            <li><a href="#">Generators</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-links">
-                        <h4>Support</h4>
-                        <ul>
-                            <li><a href="#">Discord Server</a></li>
-                            <li><a href="#">Ticket System</a></li>
-                            <li><a href="#">Terms of Service</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div style="text-align: center; color: #444; font-size: 0.8rem; padding-top: 20px; border-top: 1px solid #111;">
-                    &copy; 2023 Vaylo. Not affiliated with Mojang AB.
-                </div>
-            </div>
-        </footer>
+        </div>
     </div>
 
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="toast">
-        <span style="color: var(--neon-cyan); font-size: 1.2rem;">✓</span>
-        <span id="toast-msg">Added to cart</span>
-    </div>
-
-    <!-- FIREBASE SDK & LOGIC -->
+    <!-- SCRIPTS -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { 
             getAuth, 
-            createUserWithEmailAndPassword, 
             signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
             signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            signInWithPopup
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-        // Your web app's Firebase configuration
+        // --- 1. FIREBASE SETUP ---
         const firebaseConfig = {
             apiKey: "AIzaSyCzvglKAYm9pruxMOViL27pTAOjO2q6GiA",
             authDomain: "vaylov2.firebaseapp.com",
@@ -750,191 +501,279 @@
             messagingSenderId: "757155788329",
             appId: "1:757155788329:web:abbba23e574d327e808e38"
         };
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
-        // DOM Elements
-        const authScreen = document.getElementById('auth-screen');
-        const appContent = document.getElementById('app-content');
-        const authForm = document.getElementById('auth-form');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const authTitle = document.getElementById('auth-title-text');
-        const authSubmitBtn = document.getElementById('auth-submit-btn');
-        const toggleAuthMode = document.getElementById('toggle-auth-mode');
-        const switchText = document.getElementById('switch-text');
-        const authError = document.getElementById('auth-error');
-        const logoutBtn = document.getElementById('logout-btn');
+        // --- 2. DATA ---
+        const products = [
+            { id: 1, title: "Minecraft Full Access", desc: "Full access unclaimed account. Change email/pass/skin.", price: "$4.99", type: "Full Access", img: "https://picsum.photos/seed/v1/500/500" },
+            { id: 2, title: "Hypixel MVP+", desc: "High stats Bedwars account with MVP+ rank.", price: "$19.99", type: "Hypixel", img: "https://picsum.photos/seed/v2/500/500" },
+            { id: 3, title: "Java Gift Code", desc: "Brand new code for Minecraft Java Edition.", price: "$26.00", type: "Gift Codes", img: "https://picsum.photos/seed/v3/500/500" },
+            { id: 4, title: "Migration Ready", desc: "Legacy account ready for Microsoft migration.", price: "$3.99", type: "Full Access", img: "https://picsum.photos/seed/v4/500/500" },
+            { id: 5, title: "Optifine Cape", desc: "Account with Optifine cape included.", price: "$8.50", type: "Gift Codes", img: "https://picsum.photos/seed/v5/500/500" },
+            { id: 6, title: "Hypixel VIP", desc: "Starter account with VIP rank.", price: "$5.50", type: "Hypixel", img: "https://picsum.photos/seed/v6/500/500" }
+        ];
 
-        // State
-        let isLoginMode = true;
+        let cart = [];
 
-        // Toggle between Login and Signup
-        toggleAuthMode.addEventListener('click', () => {
-            isLoginMode = !isLoginMode;
-            authError.style.display = 'none';
-            if (isLoginMode) {
-                authTitle.innerText = 'Welcome Back';
-                authSubmitBtn.innerText = 'Sign In';
-                switchText.innerHTML = 'Don\'t have an account? <span id="toggle-auth-mode">Sign Up</span>';
-            } else {
-                authTitle.innerText = 'Create Account';
-                authSubmitBtn.innerText = 'Sign Up';
-                switchText.innerHTML = 'Already have an account? <span id="toggle-auth-mode">Sign In</span>';
-            }
-            // Re-attach listener to new span element
-            document.getElementById('toggle-auth-mode').addEventListener('click', arguments.callee);
-        });
-
-        // Handle Form Submission
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            authError.style.display = 'none';
-
-            try {
-                if (isLoginMode) {
-                    // Sign In
-                    await signInWithEmailAndPassword(auth, email, password);
-                    // Redirect happens automatically via onAuthStateChanged
-                } else {
-                    // Sign Up
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    // Redirect happens automatically via onAuthStateChanged
-                }
-            } catch (error) {
-                authError.style.display = 'block';
-                const errorCode = error.code;
-                
-                if (errorCode === 'auth/invalid-credential' || errorCode === 'auth/wrong-password') {
-                    authError.innerText = "Email or password is incorrect";
-                } else if (errorCode === 'auth/email-already-in-use') {
-                    authError.innerText = "User already exists. Please sign in";
-                } else {
-                    authError.innerText = error.message;
-                }
-            }
-        });
-
-        // Handle Logout
-        logoutBtn.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-            } catch (error) {
-                console.error("Logout Error", error);
-            }
-        });
-
-        // Auth State Observer (Controls Visibility)
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in
-                authScreen.style.display = 'none';
-                appContent.style.display = 'block';
-                logoutBtn.style.display = 'inline-flex';
-            } else {
-                // User is signed out
-                authScreen.style.display = 'flex';
-                appContent.style.display = 'none';
-                logoutBtn.style.display = 'none';
-            }
-        });
-    </script>
-
-    <!-- EXISTING JS (Particles & UI Interactions) -->
-    <script>
-        // --- 1. TOAST LOGIC ---
-        function addToCart(item) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = `Added "${item}" to cart`;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        // --- 2. PARTICLE SYSTEM ---
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
+        // --- 3. UI LOGIC ---
         
-        let width, height;
-        let particles = [];
+        // Navigation
+        window.navigateTo = (pageId) => {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            
+            // Highlight nav links
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            const link = document.getElementById(`link-${pageId}`);
+            if(link) link.classList.add('active');
 
-        const particleCount = 70; 
-        const connectionDistance = 150;
-        const particleSpeed = 0.5;
+            if(pageId === 'cart') renderCart();
+        };
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * particleSpeed;
-                this.vy = (Math.random() - 0.5) * particleSpeed;
-                this.size = Math.random() * 2 + 1;
-                this.color = Math.random() > 0.5 ? 'rgba(0, 243, 255, ' : 'rgba(188, 19, 254, '; 
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color + '0.5)';
-                ctx.fill();
-            }
-        }
-
+        // Particles
         function initParticles() {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
+            let particlesArray = [];
+            const numberOfParticles = 60;
 
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(100, 100, 255, ${1 - distance / connectionDistance})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.directionX = (Math.random() * 2) - 1; // Speed X
+                    this.directionY = (Math.random() * 2) - 1; // Speed Y
+                    this.size = Math.random() * 2 + 1;
+                    this.color = '#32CD32';
+                }
+                update() {
+                    if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                    if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                    this.x += this.directionX;
+                    this.y += this.directionY;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
                 }
             }
 
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+            }
 
-            requestAnimationFrame(animate);
+            for (let i = 0; i < numberOfParticles; i++) particlesArray.push(new Particle());
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        initParticles();
+
+        // Search Suggestions
+        const types = [...new Set(products.map(p => p.type))];
+        const searchInput = document.getElementById('search-input');
+        const searchDropdown = document.getElementById('search-dropdown');
+
+        searchInput.addEventListener('focus', () => {
+            searchDropdown.innerHTML = types.map(t => `<div class="dropdown-item" onclick="filterShop('${t}')">${t}</div>`).join('');
+            searchDropdown.classList.add('show');
+        });
+        
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => searchDropdown.classList.remove('show'), 200);
+        });
+
+        window.filterShop = (type) => {
+            renderProducts(type);
+            document.getElementById('shop-status').innerText = `Showing: ${type}`;
+            navigateTo('shop');
+        };
+
+        // Render Products
+        function renderProducts(filter = '') {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            const filtered = filter ? products.filter(p => p.type === filter) : products;
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.onclick = () => openProductTab(p);
+                card.innerHTML = `
+                    <img src="${p.img}" class="product-img">
+                    <div class="product-info">
+                        <span class="product-type">${p.type}</span>
+                        <div class="product-name">${p.title}</div>
+                        <span class="product-price">${p.price}</span>
+                        <button class="btn-add" onclick="addToCart(event, ${p.id})">Add to Cart</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        renderProducts();
+
+        // --- 4. CART LOGIC ---
+        window.addToCart = (e, id) => {
+            e.stopPropagation(); // Don't open tab
+            const user = auth.currentUser;
+            if (!user) {
+                toggleAuthModal(true);
+                alert("Please sign in to add items to your cart.");
+                return;
+            }
+
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCartUI();
+            
+            const btn = e.target;
+            btn.innerText = "Added!";
+            setTimeout(() => btn.innerText = "Add to Cart", 1000);
+        };
+
+        window.removeFromCart = (index) => {
+            cart.splice(index, 1);
+            updateCartUI();
+            renderCart(); // Re-render cart page
+        };
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
         }
 
-        window.addEventListener('resize', resize);
-        resize();
-        initParticles();
-        animate();
+        function renderCart() {
+            const container = document.getElementById('cart-container');
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color: #666; text-align: center; padding: 40px;">Your cart is empty.</p>';
+                document.getElementById('cart-total').innerText = '';
+                return;
+            }
+
+            let total = 0;
+            let html = '';
+            cart.forEach((item, index) => {
+                // Strip $ for calculation
+                const priceVal = parseFloat(item.price.replace('$',''));
+                total += priceVal;
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <img src="${item.img}" class="cart-thumb">
+                            <div>
+                                <div style="font-weight:bold; color:#fff;">${item.title}</div>
+                                <div style="color:#888; font-size:0.9rem;">${item.type}</div>
+                                <div style="color:var(--accent-lime);">${item.price}</div>
+                            </div>
+                        </div>
+                        <button class="cart-remove" onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            document.getElementById('cart-total').innerText = `Total: $${total.toFixed(2)}`;
+        }
+
+        // --- 5. AUTH LOGIC ---
+        window.toggleAuthModal = (show) => {
+            const modal = document.getElementById('auth-modal');
+            if(show) modal.classList.add('active');
+            else modal.classList.remove('active');
+        };
+
+        window.toggleAuthView = (view) => {
+            if(view === 'signup') {
+                document.getElementById('login-view').style.display = 'none';
+                document.getElementById('signup-view').style.display = 'block';
+            } else {
+                document.getElementById('signup-view').style.display = 'none';
+                document.getElementById('login-view').style.display = 'block';
+            }
+        };
+
+        window.handleLogin = async () => {
+            const e = document.getElementById('login-email').value;
+            const p = document.getElementById('login-pass').value;
+            try { await signInWithEmailAndPassword(auth, e, p); toggleAuthModal(false); } 
+            catch (err) { alert("Login Failed: " + err.message); }
+        };
+
+        window.handleSignup = async () => {
+            const e = document.getElementById('signup-email').value;
+            const p = document.getElementById('signup-pass').value;
+            try { await createUserWithEmailAndPassword(auth, e, p); toggleAuthModal(false); }
+            catch (err) { alert("Signup Failed: " + err.message); }
+        };
+
+        window.handleGoogleAuth = async () => {
+            try { await signInWithPopup(auth, googleProvider); toggleAuthModal(false); }
+            catch (err) { console.error(err); }
+        };
+
+        // Auth State & Navbar Update
+        onAuthStateChanged(auth, (user) => {
+            const container = document.getElementById('auth-buttons-container');
+            if (user) {
+                // Signed In - Show Name
+                const displayName = user.displayName || user.email.split('@')[0];
+                container.innerHTML = `
+                    <div class="profile-btn" onclick="toggleProfileMenu()">
+                        ${displayName}
+                    </div>
+                    <div class="profile-menu" id="profile-menu">
+                        <div class="menu-item" onclick="handleLogout()">Sign Out</div>
+                    </div>
+                `;
+            } else {
+                // Signed Out - Show Login Button
+                container.innerHTML = `<button class="auth-btn" onclick="toggleAuthModal(true)">Sign In</button>`;
+            }
+        });
+
+        window.toggleProfileMenu = () => {
+            const menu = document.getElementById('profile-menu');
+            menu.classList.toggle('show');
+        };
+
+        window.handleLogout = () => signOut(auth);
+
+        // Close menu when clicking elsewhere
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.profile-btn') && !e.target.closest('.profile-menu')) {
+                const menu = document.getElementById('profile-menu');
+                if(menu) menu.classList.remove('show');
+            }
+        });
+
+        // --- 6. PRODUCT TAB ---
+        window.openProductTab = (p) => {
+            document.getElementById('tab-img').src = p.img;
+            document.getElementById('tab-title').innerText = p.title;
+            document.getElementById('tab-desc').innerText = p.desc;
+            document.getElementById('tab-price').innerText = p.price;
+            document.getElementById('tab-add-btn').onclick = (e) => addToCart(e, p.id);
+            document.getElementById('product-tab').classList.add('open');
+        };
+        
+        window.closeProductTab = () => {
+            document.getElementById('product-tab').classList.remove('open');
+        };
+
     </script>
 </body>
 </html>
